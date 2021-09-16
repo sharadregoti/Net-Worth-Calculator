@@ -27,6 +27,6 @@ public class ReadSms extends AppCompatActivity  {
 
         RecyclerView myRecView = findViewById(R.id.sms_msg_list);
         myRecView.setLayoutManager(new LinearLayoutManager(this));
-        myRecView.setAdapter(new RecycleAdapter(smsData));
+        myRecView.setAdapter(new RecycleAdapter(this,smsData));
     }
 }

@@ -5,9 +5,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ICICI implements Bank {
-    
+
     @Override
-    public HashMap<String,String> parse(String smsBody) throws NotTransactionSMSException,FalseAlarmException {
+    public HashMap<String, String> parse(String smsBody) throws NotTransactionSMSException, FalseAlarmException {
         HashMap<String, String> map = new HashMap<>();
 
         if (smsBody.contains("Credit Card")) {
@@ -129,7 +129,7 @@ public class ICICI implements Bank {
                         str = arr[0];
                     }
                 }
-                str = str.trim();
+                str = str.trim().replace(",", "");
                 map.put("amount", str);
             }
         }

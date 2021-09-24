@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/bottom_menu_home"
+        android:icon="@drawable/dashboard"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/bottom_menu_activities"
+        android:icon="@drawable/transaction_wallet"
+        android:visible="true"
+        android:title="Activites" />
+
+<!--    <item-->
+<!--        android:id="@+id/bottom_menu_placeholder"-->
+<!--        android:enabled="false"-->
+<!--        android:title="" />-->
+
+    <item
+        android:id="@+id/bottom_menu_privacy"
+        android:icon="@drawable/privacy"
+        android:title="Privacy" />
+
+    <item
+        android:id="@+id/bottom_menu_settings"
+        android:icon="@drawable/settings"
+        android:title="Settings" />
+</menu>

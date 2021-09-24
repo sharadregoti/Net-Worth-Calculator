@@ -10,11 +10,20 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Myapp">
-        <activity android:name=".ViewRowItemActivity"></activity>
-        <activity android:name=".ReadSms"></activity>
+        android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ActivitySettings"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ActivityPrivacy"
+            android:label="@string/title_activity_privacy"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ActivityAddCashTransaction" />
+        <activity android:name=".ActivityDetailedTransactionItem" />
+        <activity android:name=".ActivityTransactions" />
+        <activity
+            android:name=".ActivityHome"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

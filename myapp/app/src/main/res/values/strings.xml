@@ -2,4 +2,19 @@
     <string name="app_name">myapp</string>
     <string name="read_sms">Read SMS</string>
     <string name="textview">TextView</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello first fragment</string>
+    <string name="add_cash_txn_amount_compulsory">Amount</string>
+    <string name="add_cash_txn_txn_type_compulsory">Transaction Type</string>
+    <string name="add_cash_txn_expense_merch_compulsory">Expense Merchant</string>
+    <string name="title_activity_privacy">Privacy</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_settings">Settings</string>
 </resources>

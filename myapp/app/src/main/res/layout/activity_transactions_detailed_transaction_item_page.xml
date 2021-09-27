@@ -10,8 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,97 +20,179 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp">
+            android:layout_margin="8dp"
+            app:cardElevation="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Subtitle2"
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/detailed_transaction_activity_image"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="194dp"-->
+                <!--                    android:contentDescription="Hello world"-->
+                <!--                    app:srcCompat="@drawable/privacy" />-->
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?android:attr/dividerVertical" />
+
+                <include layout="@layout/reusable_card_view" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?android:attr/dividerVertical" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:gravity="center_vertical"
-                    android:text="Tags" />
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
 
-
-                <com.google.android.material.chip.ChipGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.chip.Chip
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/detailed_transaction_activity_delete_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="UPI" />
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:text="Delete" />
 
-                    <com.google.android.material.chip.Chip
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/detailed_transaction_activity_edit_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Payment" />
-                </com.google.android.material.chip.ChipGroup>
+                        android:layout_weight="1"
+                        android:text="Edit" />
+                </LinearLayout>
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            style="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:gravity="center_vertical"
-            android:text="SMS" />
-
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardElevation="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <!-- Title, secondary and supporting text -->
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_state_bank_of_india_logo" />
-
-                    <TextView
-                        style="@style/TextAppearance.MaterialComponents.Caption"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center"
-                        android:text="13 Sep 2021" />
-
-                </LinearLayout>
+                    android:text="Notes"
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="?android:attr/dividerVertical" />
 
                 <TextView
-                    android:id="@+id/detailed_transaction_item_page_sms_body"
-                    style="@style/TextAppearance.MaterialComponents.Body1"
-                    android:layout_width="match_parent"
+                    android:id="@+id/detailed_transaction_activity_notes"
+                    style="@style/TextAppearance.MaterialComponents.Body2"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center_vertical"
+                    android:layout_marginTop="8dp"
+                    android:text="This is a small message to my freind in ireland" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/detailed_transaction_activity_sms_material_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardElevation="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <!-- Title, secondary and supporting text -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SMS"
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="?android:attr/dividerVertical" />
+
+                <TextView
+                    android:id="@+id/detailed_transaction_activity_bank_name"
+                    style="@style/TextAppearance.MaterialComponents.Subtitle2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="State Bank Of India" />
+
+                <TextView
+                    android:id="@+id/detailed_transaction_activity_sms_body"
+                    style="@style/TextAppearance.MaterialComponents.Body2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="ICICI Bank Acct XXX705 debited for INR 42.00 on 04-Sep-21 and q81223985@ybl credited.UPI:124760845162.Call 18002662 for dispute or SMS BLOCK 705 to 9215676766." />
 
             </LinearLayout>
-
         </com.google.android.material.card.MaterialCardView>
+
+
+        <!--        <com.google.android.material.card.MaterialCardView-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginBottom="16dp">-->
+
+        <!--            <LinearLayout-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:orientation="vertical">-->
+
+        <!--                <TextView-->
+        <!--                    style="@style/TextAppearance.MaterialComponents.Subtitle2"-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="wrap_content"-->
+        <!--                    android:layout_marginBottom="8dp"-->
+        <!--                    android:gravity="center_vertical"-->
+        <!--                    android:text="Tags" />-->
+
+
+        <!--                <com.google.android.material.chip.ChipGroup-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="wrap_content">-->
+
+        <!--                    <com.google.android.material.chip.Chip-->
+        <!--                        android:layout_width="wrap_content"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:text="UPI" />-->
+
+        <!--                    <com.google.android.material.chip.Chip-->
+        <!--                        android:layout_width="wrap_content"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:text="Payment" />-->
+        <!--                </com.google.android.material.chip.ChipGroup>-->
+
+        <!--            </LinearLayout>-->
+
+        <!--        </com.google.android.material.card.MaterialCardView>-->
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

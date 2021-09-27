@@ -1,5 +1,7 @@
 package com.example.myapp.banks;
 
+import com.example.myapp.Utils;
+
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +21,7 @@ public class ICICI implements Bank {
                */
             throw new FalseAlarmException("False transactional SMS");
         } else if (smsBody.contains("debited")) {
-            map.put("type", "debited");
+            map.put("type", Utils.TXN_TYPE_DEBITED);
             if (smsBody.contains("credited.UPI")) {
                 Integer index = smsBody.indexOf("credited.UPI");
                 String subString = smsBody.substring(0, index);
@@ -68,7 +70,7 @@ public class ICICI implements Bank {
                 map.put("tags", arr[0].toUpperCase());
             }
         } else if (smsBody.contains("credited")) {
-            map.put("type", "credited");
+            map.put("type", Utils.TXN_TYPE_CREDITED);
             if (smsBody.contains(". UPI Ref.")) {
                 Integer index = smsBody.indexOf(". UPI Ref.");
                 String subString = smsBody.substring(0, index);

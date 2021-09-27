@@ -25,7 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LAST_PROCESSED_TRANSACTION_SMS_TABLE = "last_processed_transaction_sms";
     private static final String LAST_UPDATED_TIMESTAMP = "last_update_ts";
 
-    private static final String TRANSACTION_SMS_TABLE = "transaction_sms";
+    private static final String TRANSACTION_SMS_TABLE = "transactions";
     private static final String ID_0 = "id";
     private static final String SMS_ID_1 = "sms_id";
     private static final String SMS_MESSAGE_2 = "sms_message";
@@ -39,8 +39,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String IMAGE_REF_10 = "image_ref";
     private static final String CATEGORY_11 = "category";
     private static final String PAYMENT_TYPE_12 = "payment_type";
-
-    private static final int s = 420;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, SQL_FILE_NAME, null, 1);
@@ -97,6 +95,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (result != -1);
     }
 
+    public ArrayList<String> getListOfBanks() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = SQLiteQueryBuilder.buildQueryString(true, TRANSACTION_SMS_TABLE, new String[]{BANK_7}, "", "", "", "", "");
+        Cursor data = db.rawQuery(query, null);
+        ArrayList<String> arr = new ArrayList<>();
+        // TODO: Some exception handling
+        if (data.moveToNext()) {
+            arr.add(data.getString(0));
+        }
+        data.close();
+        return arr;
+    }
+
+    public int updateProcessedTxnSMS(String id, float amount, Long date, String tt, String expenseMerch, String notes, String category) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(AMOUNT_3, amount);
+        cv.put(DATE_4, date);
+        cv.put(TRANSACTION_TYPE_6, tt);
+        cv.put(TRANSACTION_PERSON_5, expenseMerch);
+        cv.put(NOTES_9, notes);
+        cv.put(CATEGORY_11, category);
+        return db.update(TRANSACTION_SMS_TABLE, cv, "id = ?", new String[]{id});
+    }
+
+    public int deleteProcessedTxnSMS(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TRANSACTION_SMS_TABLE, "id = ?", new String[]{id});
+    }
+
     public String getLastProcessedTxnSMSDate() {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = SQLiteQueryBuilder.buildQueryString(false, LAST_PROCESSED_TRANSACTION_SMS_TABLE, new String[]{LAST_UPDATED_TIMESTAMP}, "", "", "", "", "1");
@@ -121,7 +149,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public float calculateIncome(String whereClause) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT SUM(amount) FROM " + TRANSACTION_SMS_TABLE + " WHERE transaction_type = ? and " + whereClause;
-        Cursor data = db.rawQuery(query, new String[]{"credited"});
+        Cursor data = db.rawQuery(query, new String[]{Utils.TXN_TYPE_CREDITED});
         float income = 0;
         while (data.moveToNext()) {
             income = data.getFloat(0);
@@ -133,7 +161,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public float calculateExpense(String whereClause) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT SUM(amount) FROM " + TRANSACTION_SMS_TABLE + " WHERE transaction_type = ? and " + whereClause;
-        Cursor data = db.rawQuery(query, new String[]{"debited"});
+        Cursor data = db.rawQuery(query, new String[]{Utils.TXN_TYPE_DEBITED});
         float expense = 0;
         while (data.moveToNext()) {
             expense = data.getFloat(0);
@@ -145,7 +173,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public float calculateInHandCash(String whereClause) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT SUM(amount) FROM " + TRANSACTION_SMS_TABLE + " WHERE transaction_type = ? and " + whereClause;
-        Cursor data = db.rawQuery(query, new String[]{"in_hand_cash"});
+        Cursor data = db.rawQuery(query, new String[]{Utils.TXN_TYPE_IN_HAND_CASH});
         float inHandCash = 0;
         while (data.moveToNext()) {
             inHandCash = data.getFloat(0);
@@ -220,8 +248,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (data.moveToNext()) {
 
             HashMap<String, Object> map = new HashMap<>();
+            map.put(ID_0, data.getInt(0));
             map.put(SMS_ID_1, data.getInt(1));
-            map.put(SMS_MESSAGE_2, data.getBlob(2).toString());
+            map.put(SMS_MESSAGE_2, data.getString(2));
             map.put(AMOUNT_3, data.getFloat(3));
             map.put(DATE_4, data.getLong(4));
             map.put(TRANSACTION_PERSON_5, data.getString(5));
@@ -237,7 +266,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         data.close();
 
-        return new StoreFilteredTransactionResult(this.calculateIncome(whereClause), this.calculateExpense(whereClause), list);
+        return new StoreFilteredTransactionResult(this.calculateIncome(whereClause), this.calculateExpense(whereClause), this.calculateInHandCash(whereClause), list);
     }
-
 }

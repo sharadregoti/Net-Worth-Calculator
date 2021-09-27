@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F5F9F9">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/home_activity_net_worth_card_view"
@@ -12,13 +13,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        app:cardElevation="0dp"
-        app:cardUseCompatPadding="true"
+        app:cardElevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/black"
-        app:strokeWidth="1dp">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +38,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    style="@style/TextAppearance.MaterialComponents.Subtitle2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -49,7 +47,7 @@
 
 
                 <TextView
-                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    style="@style/TextAppearance.MaterialComponents.Subtitle2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -66,7 +64,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    style="@style/TextAppearance.MaterialComponents.Subtitle2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -74,7 +72,7 @@
                     android:text="Liabilities" />
 
                 <TextView
-                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    style="@style/TextAppearance.MaterialComponents.Subtitle2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -88,44 +86,43 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/home_activity_menu_icon_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:cardElevation="0dp"
-        app:cardUseCompatPadding="true"
+        android:layout_margin="16dp"
+        app:cardElevation="5dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_action_bar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:strokeColor="@color/black"
-        app:strokeWidth="1dp">
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:orientation="vertical">
 
             <TextView
                 style="@style/TextAppearance.MaterialComponents.Headline5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
                 android:gravity="center"
-                android:paddingBottom="16dp"
                 android:text="Investments" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/dividerVertical" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginVertical="8dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:layout_weight="1"
@@ -135,22 +132,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:src="@drawable/dashboard" />
+                        android:src="@drawable/mutual_fund_24" />
 
                     <TextView
-                        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                        style="@style/TextAppearance.MaterialComponents.Subtitle2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:gravity="center"
                         android:text="Mutual Fund" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:layout_weight="1"
@@ -160,22 +154,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:src="@drawable/dashboard" />
+                        android:src="@drawable/stocks_24" />
 
                     <TextView
-                        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                        style="@style/TextAppearance.MaterialComponents.Subtitle2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:gravity="center"
                         android:text="Stocks" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:layout_weight="1"
@@ -185,21 +176,95 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:src="@drawable/dashboard" />
+                        android:src="@drawable/bank_balance_24" />
 
                     <TextView
-                        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                        style="@style/TextAppearance.MaterialComponents.Subtitle2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:gravity="center"
                         android:text="Banks" />
 
                 </LinearLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/crypto_25" />
+
+                    <TextView
+                        style="@style/TextAppearance.MaterialComponents.Subtitle2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Crypto" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:visibility="invisible">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/dashboard" />
+
+                    <TextView
+                        style="@style/TextAppearance.MaterialComponents.Subtitle2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Stocks" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:visibility="invisible">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/dashboard" />
+
+                    <TextView
+                        style="@style/TextAppearance.MaterialComponents.Subtitle2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Banks" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
 

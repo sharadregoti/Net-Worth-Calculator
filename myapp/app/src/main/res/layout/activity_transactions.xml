@@ -5,19 +5,9 @@
     android:id="@+id/motionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5F9F9"
     android:orientation="vertical"
     app:layoutDescription="@xml/activity_transactions_scene">
-
-    <!--    <com.google.android.material.appbar.MaterialToolbar-->
-    <!--        android:id="@+id/transaction_activity_material_toolbar"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:minHeight="?attr/actionBarSize"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        app:menu="@menu/app_bar"-->
-    <!--        app:titleTextColor="@android:color/white" />-->
 
     <include
         layout="@layout/top_action_bar"
@@ -27,110 +17,99 @@
         android:id="@+id/materialCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:cardElevation="0dp"
-        app:cardUseCompatPadding="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardElevation="5dp"
         app:layout_constraintBottom_toTopOf="@+id/transaction_page_sms_list_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top_action_bar"
-        app:strokeColor="@color/black"
-        app:strokeWidth="1dp">
+        app:layout_constraintTop_toBottomOf="@id/top_action_bar">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:padding="8dp">
 
             <TextView
+                android:id="@+id/transaction_activity_summary_text"
                 style="@style/TextAppearance.MaterialComponents.Headline5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="Summary" />
+                android:text="Summary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/transaction_activity_in_hand_cash_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Income" />
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:paddingEnd="32dp"
+                android:text="In Hand Cash"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/transaction_activity_summary_text" />
 
 
-                <TextView
-                    android:id="@+id/transaction_page_income_text"
-                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="+ ₹1,00,00 "
-                    android:textColor="#118C4F" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/transaction_activity_set_in_hand_cash_amount_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="8dp"
+                android:text="+ ₹3,00,00 "
+                android:textColor="#118C4F"
+                app:layout_constraintStart_toEndOf="@id/transaction_activity_in_hand_cash_text"
+                app:layout_constraintTop_toBottomOf="@id/transaction_activity_summary_text" />
 
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Expense" />
 
-                <TextView
-                    android:id="@+id/transaction_page_expense_text"
-                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="- ₹2,00,00 "
-                    android:textColor="#db1115" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/transaction_activity_income_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="In Hand Cash" />
+                android:layout_marginTop="8dp"
+                android:text="Income"
+                app:layout_constraintStart_toStartOf="@id/transaction_activity_in_hand_cash_text"
+                app:layout_constraintTop_toBottomOf="@id/transaction_activity_in_hand_cash_text" />
 
 
-                <TextView
-                    android:id="@+id/transaction_activity_in_hand_cash"
-                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="+ ₹1,00,00 "
-                    android:textColor="#118C4F" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/transaction_activity_set_income_amount_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="+ ₹1,00,00 "
+                android:textColor="#118C4F"
+                app:layout_constraintStart_toStartOf="@id/transaction_activity_set_in_hand_cash_amount_text"
+                app:layout_constraintTop_toBottomOf="@id/transaction_activity_set_in_hand_cash_amount_text" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/transaction_activity_expense_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Expense"
+                app:layout_constraintStart_toStartOf="@id/transaction_activity_in_hand_cash_text"
+                app:layout_constraintTop_toBottomOf="@id/transaction_activity_income_text" />
 
+            <TextView
+                android:id="@+id/transaction_activity_set_expense_amount_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="- ₹2,00,00 "
+                android:textColor="#db1115"
+                app:layout_constraintStart_toStartOf="@id/transaction_activity_set_in_hand_cash_amount_text"
+                app:layout_constraintTop_toBottomOf="@id/transaction_activity_set_income_amount_text" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -157,8 +136,8 @@
         android:id="@+id/sms_msg_list_linear"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/bottom_action_bar"
         app:layout_constraintEnd_toEndOf="parent"

@@ -8,126 +8,134 @@
 
     <include layout="@layout/top_action_bar" />
 
-    <LinearLayout
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/add_cash_transaction_save_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/top_action_bar">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/add_cash_transaction_layout_amount"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="@string/add_cash_txn_amount_compulsory">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical">
 
-            <!--this is the actual edit text which takes the input-->
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/add_cash_transaction_amount"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_cash_transaction_layout_amount"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:layout_marginBottom="16dp"
+                android:hint="@string/add_cash_txn_amount_compulsory">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <!--this is the actual edit text which takes the input-->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_cash_transaction_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Date">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/add_cash_transaction_date"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false" />
+                android:layout_marginBottom="16dp"
+                android:hint="Date">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_cash_transaction_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/add_cash_transaction_layout_transactiontype"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="@string/add_cash_txn_txn_type_compulsory">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <AutoCompleteTextView
-                android:id="@+id/add_cash_transaction_transactiontype"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_cash_transaction_layout_transactiontype"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none" />
+                android:layout_marginBottom="16dp"
+                android:hint="@string/add_cash_txn_txn_type_compulsory">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <AutoCompleteTextView
+                    android:id="@+id/add_cash_transaction_transactiontype"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Category">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <AutoCompleteTextView
-                android:id="@+id/add_cash_transaction_expense_category"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none" />
+                android:layout_marginBottom="16dp"
+                android:hint="Category">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <AutoCompleteTextView
+                    android:id="@+id/add_cash_transaction_expense_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/add_cash_transaction_layout_expense_merchant"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="@string/add_cash_txn_expense_merch_compulsory">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/add_cash_transaction_expense_merchant"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_cash_transaction_layout_expense_merchant"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/add_cash_txn_expense_merch_compulsory">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_cash_transaction_expense_merchant"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Note">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/add_cash_transaction_note"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="100dp"
+                android:layout_marginBottom="16dp"
+                android:hint="Note (optional)">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_cash_transaction_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="top" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Photo">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/add_cash_transaction_photo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="16dp"-->
+<!--                android:hint="Photo (optional)">-->
 
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:id="@+id/add_cash_transaction_photo"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content" />-->
+
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/add_cash_transaction_save_button"

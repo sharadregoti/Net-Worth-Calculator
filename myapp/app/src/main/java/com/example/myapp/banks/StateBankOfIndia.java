@@ -1,5 +1,7 @@
 package com.example.myapp.banks;
 
+import com.example.myapp.Utils;
+
 import java.util.HashMap;
 
 public class StateBankOfIndia implements Bank {
@@ -8,9 +10,9 @@ public class StateBankOfIndia implements Bank {
         HashMap<String, String> map = new HashMap<>();
 
         if (smsBody.contains("debited")) {
-            map.put("type", "debited");
+            map.put("type", Utils.TXN_TYPE_DEBITED);
         } else if (smsBody.contains("credited")) {
-            map.put("type", "credited");
+            map.put("type", Utils.TXN_TYPE_CREDITED);
         } else {
             throw new NotTransactionSMSException("Not a bank transaction");
         }

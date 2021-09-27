@@ -86,6 +86,36 @@ public class ProcessSMS {
         return d.get("transaction_type").toString();
     }
 
+    public String getPaymentType(Integer position) {
+        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
+        return d.get("payment_type").toString();
+    }
+
+    public String getNotes(Integer position) {
+        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
+        return d.get("notes").toString();
+    }
+
+    public String getPhoto(Integer position) {
+        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
+        return d.get("image_ref").toString();
+    }
+
+    public String getCategory(Integer position) {
+        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
+        return d.get("category").toString();
+    }
+
+    public String getSMSBody(Integer position) {
+        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
+        return d.get("sms_message").toString();
+    }
+
+    public String getRowId(Integer position) {
+        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
+        return d.get("id").toString();
+    }
+
     public String getBank(Integer position) {
         HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
         return d.get("bank_name").toString();
@@ -151,7 +181,7 @@ public class ProcessSMS {
                     }
 
                     map.put("bank", bank.getKey());
-                    map.put("payment_type", "online");
+                    map.put("payment_type", Utils.PAYMENT_TYPE_ONLINE);
                     map.put("transaction_person", "N/A");
                     map.put("tags", "N/A");
 

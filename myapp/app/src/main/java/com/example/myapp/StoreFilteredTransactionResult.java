@@ -10,9 +10,10 @@ public class StoreFilteredTransactionResult {
     public float inHandCash = 0;
     public List<HashMap<String, Object>> dbList = new ArrayList<>();
 
-    public StoreFilteredTransactionResult(float income, float expense, List<HashMap<String, Object>> filterdList) {
+    public StoreFilteredTransactionResult(float income, float expense, float inHandCash, List<HashMap<String, Object>> filterdList) {
         this.income = income;
         this.expense = expense;
+        this.inHandCash = inHandCash;
         this.dbList = filterdList;
     }
 

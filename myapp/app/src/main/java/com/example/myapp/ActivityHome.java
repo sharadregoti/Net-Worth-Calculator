@@ -17,8 +17,11 @@ public class ActivityHome extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        // Set Night mode
+        // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        // Set bottom app bar
         BottomNavigationView bnv = findViewById(R.id.bottom_app_bar_navigation_view);
         bnv.setSelectedItemId(R.id.bottom_menu_home);
         bnv.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {

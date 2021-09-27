@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -25,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Calendar;
 
 public class ActivityAddCashTransaction extends AppCompatActivity {
 
@@ -33,115 +35,175 @@ public class ActivityAddCashTransaction extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transactions_add_cash_transaction);
 
+        // Get all views
+        TextInputEditText etAmount = findViewById(R.id.add_cash_transaction_amount);
+        TextInputEditText etTxnDate = findViewById(R.id.add_cash_transaction_date);
+        TextInputEditText etExpenseMerch = findViewById(R.id.add_cash_transaction_expense_merchant);
+        TextInputEditText etNotes = findViewById(R.id.add_cash_transaction_note);
+        // TextInputEditText photoEditText = findViewById(R.id.add_cash_transaction_photo);
+        AutoCompleteTextView actTxnType = findViewById(R.id.add_cash_transaction_transactiontype);
+        AutoCompleteTextView actCategory = findViewById(R.id.add_cash_transaction_expense_category);
+        TextInputLayout tilAmount = findViewById(R.id.add_cash_transaction_layout_amount);
+        TextInputLayout tilExpenseMerch = findViewById(R.id.add_cash_transaction_layout_expense_merchant);
+        TextInputLayout tilTxnType = findViewById(R.id.add_cash_transaction_layout_transactiontype);
+        MaterialButton btnSave = findViewById(R.id.add_cash_transaction_save_button);
 
+        String title = "Add Cash";
+        Long myNewStartDate = 0L;
+        String sMyNewStartDate = "";
 
+        // Date picker
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();
+        MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
+        builder.setTitleText("Select A Date");
+        builder.setCalendarConstraints(constraintsBuilder.build());
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            // If extras are present that means that the parent activity is detailed view of a txn
+            // Now, initialize the activity elements with these extra values
+            title = extras.getString("activity_title");
+            String amount = extras.getString("amount");
+            etAmount.setText(amount);
+            sMyNewStartDate = extras.getString("date");
+            Long endDate = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
+            DateFormat formatter = new SimpleDateFormat("dd MMM yyyy"); // Make sure user insert date into edittext in this format.
+            try {
+                myNewStartDate = formatter.parse(sMyNewStartDate).getTime();
+                // TODO: There is a offset of 1 day, hacky solution implemented
+                myNewStartDate += 86400000;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            builder.setSelection(myNewStartDate);
+            String transaction_type = extras.getString("transaction_type");
+            actTxnType.setText(transaction_type);
+            String category = extras.getString("category");
+            actCategory.setText(category);
+            String expense_merchant = extras.getString("expense_merchant");
+            etExpenseMerch.setText(expense_merchant);
+            String notes = extras.getString("notes");
+            etNotes.setText(notes);
+            // String photo = extras.getString("photo");
+            // photoEditText.setText(photo);
+        }
+
+        final MaterialDatePicker<Long> materialDatePicker = builder.build();
+        if (myNewStartDate != 0) {
+            // If parent activity is detailed txn, then set the date got from extra value
+            etTxnDate.setText(sMyNewStartDate);
+        } else {
+            // Set date on, date edit text field
+            setCurrentDate(etTxnDate);
+        }
+
+        // Set top app bar with title depending upon the parent activity
         MaterialToolbar mt = (MaterialToolbar) findViewById(R.id.top_action_bar);
-        mt.setTitle("Add Cash");
+        mt.setTitle(title);
         setSupportActionBar(mt);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // Transaction type options
-        String[] transactionTypes = new String[]{"Credited", "Debited"};
+        String[] transactionTypes = new String[]{Utils.TXN_TYPE_CREDITED, Utils.TXN_TYPE_DEBITED};
         ArrayAdapter ttArrayAdapter = new ArrayAdapter(this, R.layout.transaction_type_drop_down_item, transactionTypes);
-        AutoCompleteTextView actv = findViewById(R.id.add_cash_transaction_transactiontype);
-        actv.setAdapter(ttArrayAdapter);
+        actTxnType.setAdapter(ttArrayAdapter);
 
         // Category options
-        String[] categories = new String[]{"Beauty & Fitness", "Bills", "EMI", "Eating Out", "Education", "Entertainment", "Grocery", "Household", "Insurance", "Investments", "Medical", "Miscellaneous", "Rent", "Shopping", "Transport", "Travel"};
+        String[] categories = new String[]{Utils.TXN_CATEGORY_BEAUTY_FITNESS, Utils.TXN_CATEGORY_BILLS, Utils.TXN_CATEGORY_EMI, Utils.TXN_CATEGORY_EATING, Utils.TXN_CATEGORY_EDUCATION, Utils.TXN_CATEGORY_ENTERTAINMENT, Utils.TXN_CATEGORY_GROCERY, Utils.TXN_CATEGORY_HOUSEHOLD, Utils.TXN_CATEGORY_INSURANCE, Utils.TXN_CATEGORY_INVESTMENTS, Utils.TXN_CATEGORY_MEDICAL, Utils.TXN_CATEGORY_MISCELLANEOUS, Utils.TXN_CATEGORY_RENT, Utils.TXN_CATEGORY_SHOPPING, Utils.TXN_CATEGORY_TRANSPORT, Utils.TXN_CATEGORY_TRAVEL,};
         ArrayAdapter cArrayAdapter = new ArrayAdapter(this, R.layout.edit_text_drop_down_style, categories);
-        AutoCompleteTextView categoryAutoComplete = findViewById(R.id.add_cash_transaction_expense_category);
-        categoryAutoComplete.setAdapter(cArrayAdapter);
+        actCategory.setAdapter(cArrayAdapter);
 
-        // Date picker
-        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-        builder.setTitleText("Select A Date");
-        final MaterialDatePicker materialDatePicker = builder.build();
 
-        // Set date on, date edit text field
-        TextInputEditText tied = findViewById(R.id.add_cash_transaction_date);
-        setCurrentDate(tied);
+        // ************* Listeners ***************
 
-        tied.setOnClickListener(new View.OnClickListener() {
+        // Show date picker when date edit text is clicked
+        etTxnDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER");
             }
         });
 
+        // When a date is selected in date picker by pressing ok button, set that date in edit text
         materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Object selection) {
-                tied.setText(materialDatePicker.getHeaderText());
+                etTxnDate.setText(materialDatePicker.getHeaderText());
             }
         });
 
-        TextInputEditText amountEditText = findViewById(R.id.add_cash_transaction_amount);
-        AutoCompleteTextView ttAutoText = findViewById(R.id.add_cash_transaction_transactiontype);
-        AutoCompleteTextView categoryAutoText = findViewById(R.id.add_cash_transaction_expense_category);
-        TextInputEditText expenseMerchEditText = findViewById(R.id.add_cash_transaction_expense_merchant);
-        TextInputEditText noteEditText = findViewById(R.id.add_cash_transaction_note);
 
-        TextInputLayout tilAmount = findViewById(R.id.add_cash_transaction_layout_amount);
-        TextInputLayout tilExpenseMerch = findViewById(R.id.add_cash_transaction_layout_expense_merchant);
-        TextInputLayout tilTT = findViewById(R.id.add_cash_transaction_layout_transactiontype);
-
-
-        amountEditText.setOnFocusChangeListener((view, b) -> {
+        // Disable validation errors on focus
+        etAmount.setOnFocusChangeListener((view, b) -> {
             if (b) {
                 tilAmount.setErrorEnabled(false);
             }
         });
 
-        expenseMerchEditText.setOnFocusChangeListener((view, b) -> {
+        etExpenseMerch.setOnFocusChangeListener((view, b) -> {
             if (b) {
                 tilExpenseMerch.setErrorEnabled(false);
             }
         });
 
         // Hide soft keyboard while selecting from drop down menus
-        ttAutoText.setOnFocusChangeListener((view, b) -> {
+        actTxnType.setOnFocusChangeListener((view, b) -> {
             if (b) {
-                tilTT.setErrorEnabled(false);
+                tilTxnType.setErrorEnabled(false);
                 try {
                     InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    im.hideSoftInputFromWindow(ttAutoText.getWindowToken(), 0);
+                    im.hideSoftInputFromWindow(actTxnType.getWindowToken(), 0);
                 } catch (RuntimeException e) {
                     Log.d("Exception occured", e.toString());
                 }
             }
         });
-        categoryAutoText.setOnFocusChangeListener((view, b) -> {
+        actCategory.setOnFocusChangeListener((view, b) -> {
             if (b) {
                 try {
                     InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    im.hideSoftInputFromWindow(categoryAutoText.getWindowToken(), 0);
+                    im.hideSoftInputFromWindow(actCategory.getWindowToken(), 0);
                 } catch (RuntimeException e) {
                     Log.d("Exception occured", e.toString());
                 }
             }
         });
 
-        MaterialButton savebtn = findViewById(R.id.add_cash_transaction_save_button);
-        savebtn.setOnClickListener(new View.OnClickListener() {
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 // Input validation
                 boolean isValid = true;
+                String amount = etAmount.getText().toString();
+                // TODO: We are not take care of time
+                String date = etTxnDate.getText().toString();
+                String tt = actTxnType.getText().toString();
+                String category = actCategory.getText().toString();
+                String expenseMerch = Utils.toTitleCase(etExpenseMerch.getText().toString());
+                String note = etNotes.getText().toString();
 
-                if (amountEditText.getText().toString().isEmpty()) {
+                if (amount.isEmpty()) {
                     tilAmount.setError("Amount is Mandatory");
                     isValid = false;
+                } else if (amount.length() > 20) {
+                    tilAmount.setError("Cannot have more than 20 characters");
                 }
 
-                if (expenseMerchEditText.getText().toString().isEmpty()) {
+                if (expenseMerch.isEmpty()) {
                     tilExpenseMerch.setError("Merchant is Mandatory");
                     isValid = false;
+                } else if (expenseMerch.length() > 500) {
+                    tilExpenseMerch.setError("Cannot have more than 500 characters");
                 }
 
-                if (ttAutoText.getText().toString().isEmpty()) {
-                    tilTT.setError("Transaction Type is Mandatory");
+                if (note.length() > 500) {
+                    etNotes.setError("Cannot have more than 500 characters");
+                }
+
+                if (tt.isEmpty()) {
+                    tilTxnType.setError("Transaction Type is Mandatory");
                     isValid = false;
                 }
 
@@ -149,13 +211,6 @@ public class ActivityAddCashTransaction extends AppCompatActivity {
                     return;
                 }
 
-                String amount = amountEditText.getText().toString();
-                // TODO: We are not take care of time
-                String date = tied.getText().toString();
-                String tt = ttAutoText.getText().toString();
-                String category = categoryAutoText.getText().toString();
-                String expenseMerch = expenseMerchEditText.getText().toString();
-                String note = noteEditText.getText().toString();
                 DateFormat formatter = new SimpleDateFormat("dd MMM yyyy"); // Make sure user insert date into edittext in this format.
                 Long dateL = 0L;
                 try {

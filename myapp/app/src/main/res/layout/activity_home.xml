@@ -3,88 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F5F9F9">
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/home_activity_net_worth_card_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:cardElevation="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                style="@style/TextAppearance.MaterialComponents.Headline5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="My Net Worth" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Subtitle2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Assets" />
-
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Subtitle2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="+ ₹1,00,00 "
-                    android:textColor="#118C4F" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Subtitle2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Liabilities" />
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Subtitle2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="- ₹2,00,00 "
-                    android:textColor="#db1115" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-
-    </com.google.android.material.card.MaterialCardView>
+    android:layout_height="match_parent">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/home_activity_menu_icon_card_view"
@@ -112,19 +31,20 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginBottom="8dp"
                 android:background="?android:attr/dividerVertical" />
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
+                android:layout_marginVertical="16dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/home_activity_mutual_fund_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -132,7 +52,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/mutual_fund_24" />
+                        android:src="@drawable/activity_home_investments_mutual_fund_icon" />
 
                     <TextView
                         style="@style/TextAppearance.MaterialComponents.Subtitle2"
@@ -144,9 +64,9 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/home_activity_stocks_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -154,7 +74,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/stocks_24" />
+                        android:src="@drawable/activity_home_investments_stocks_icon" />
 
                     <TextView
                         style="@style/TextAppearance.MaterialComponents.Subtitle2"
@@ -166,9 +86,9 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/home_activity_banks_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -176,7 +96,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/bank_balance_24" />
+                        android:src="@drawable/bottom_app_bar_transactions_icon" />
 
                     <TextView
                         style="@style/TextAppearance.MaterialComponents.Subtitle2"
@@ -192,13 +112,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
+                android:layout_marginVertical="16dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/home_activity_crypto_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -206,7 +126,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/crypto_25" />
+                        android:src="@drawable/activity_home_investments_crypto_icon" />
 
                     <TextView
                         style="@style/TextAppearance.MaterialComponents.Subtitle2"
@@ -229,7 +149,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/dashboard" />
+                        android:src="@drawable/bottom_app_bar_home_icon" />
 
                     <TextView
                         style="@style/TextAppearance.MaterialComponents.Subtitle2"
@@ -252,7 +172,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/dashboard" />
+                        android:src="@drawable/bottom_app_bar_home_icon" />
 
                     <TextView
                         style="@style/TextAppearance.MaterialComponents.Subtitle2"

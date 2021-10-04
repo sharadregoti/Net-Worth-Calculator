@@ -1,4 +1,5 @@
-package com.example.myapp;
+
+package com.example.myapp.Utils;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -12,7 +13,7 @@ import com.example.myapp.banks.NotTransactionSMSException;
 import com.example.myapp.banks.StateBankOfIndia;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,10 +22,6 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ProcessSMS {
-    static final String ICICI = "ICICI";
-    static final String STATE_BANK_OF_INDIA = "SBI";
-    static final String HDFC_BANK = "HDFC";
-    static final String BANK_OF_INDIA = "BOI";
 
     // List of supported banks
     private final HashMap<String, String[]> supportedBanks = new HashMap<>();
@@ -37,8 +34,8 @@ public class ProcessSMS {
     public ProcessSMS(Context ctx) {
         this.ctx = ctx;
         this.dh = new DatabaseHelper(ctx);
-        this.supportedBanks.put(ICICI, new String[]{"ICICIB"});
-//        this.supportedBanks.put(STATE_BANK_OF_INDIA, new String[]{"SBIUPI", "ATMSBI", "SBIATM", "CBSSBI", "SBIPSG", "SBIDGT"});
+        this.supportedBanks.put(Constants.BANK_ICICI, new String[]{"ICICIB"});
+        this.supportedBanks.put(Constants.BANK_STATE_BANK_OF_INDIA, new String[]{"SBIUPI", "ATMSBI", "SBIATM", "CBSSBI", "SBIPSG", "SBIDGT"});
 //        this.supportedBanks.put(HDFC_BANK, new String[]{"ICICIB"});
 //        this.supportedBanks.put(BANK_OF_INDIA, new String[]{"ICICIB"});
         processAndStoreSMS();
@@ -136,18 +133,20 @@ public class ProcessSMS {
 //        this.dh.clean();
         String[] columns = new String[]{"_id", "address", "body", "date"};
 
+        String lastProcessedDate = this.dh.getLastProcessedTxnSMSDate();
+        if (lastProcessedDate.isEmpty()) {
+            // This happens during first initialization
+            // Use the default of past 6 months
+            Long startDate = LocalDate.now().atTime(0, 0, 0).minusMonths(6).withDayOfMonth(1).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
+            lastProcessedDate = String.valueOf(startDate);
+            Log.d("Last processed date is empty: ", lastProcessedDate);
+        }
+
         for (Map.Entry<String, String[]> bank : this.supportedBanks.entrySet()) {
 
             // Build where clause
-            String lastProcessedDate = this.dh.getLastProcessedTxnSMSDate();
-            if (lastProcessedDate.isEmpty()) {
-                // This happens during first initialization
-                // Use the default of past 6 months
-                Long startDate = LocalDateTime.now().minusMonths(6).withDayOfMonth(1).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
-                lastProcessedDate = String.valueOf(startDate);
-                Log.d("Last processed date is empty: ", lastProcessedDate);
-            }
-
+            // TODO: Check descending on Ascending in database table new values should be on top
+            // TODO: Change this to simple where clause with like operator
             StringBuilder whereClause = new StringBuilder(String.format("(date > %s) and ", lastProcessedDate));
             for (int i = 0; i < bank.getValue().length; i++) {
                 whereClause.append("address LIKE \"%").append(bank.getValue()[i]).append("\"");
@@ -157,15 +156,14 @@ public class ProcessSMS {
             }
 
             Log.d("SMS where clause: ", whereClause.toString());
-
-            Cursor cursor = ctx.getContentResolver().query(Uri.parse("content://sms"), columns, whereClause.toString(), null, null);
+            Cursor cursor = ctx.getContentResolver().query(Uri.parse("content://sms"), columns, whereClause.toString(), null, "date ASC");
 
             Bank bankObj;
             switch (bank.getKey()) {
-                case STATE_BANK_OF_INDIA:
+                case Constants.BANK_STATE_BANK_OF_INDIA:
                     bankObj = new StateBankOfIndia();
                     break;
-                case ICICI:
+                case Constants.BANK_ICICI:
                     bankObj = new ICICI();
                     break;
                 default:
@@ -181,7 +179,7 @@ public class ProcessSMS {
                     }
 
                     map.put("bank", bank.getKey());
-                    map.put("payment_type", Utils.PAYMENT_TYPE_ONLINE);
+                    map.put("payment_type", Constants.PAYMENT_TYPE_ONLINE);
                     map.put("transaction_person", "N/A");
                     map.put("tags", "N/A");
 
@@ -189,6 +187,10 @@ public class ProcessSMS {
                     HashMap<String, String> newMap;
                     try {
                         newMap = bankObj.parse(smsBody);
+                        if (Objects.equals(newMap.get("bank_balance"), "yes")) {
+                            this.dh.upsertBankAccount(Float.parseFloat(Objects.requireNonNull(newMap.get("amount"))), bank.getKey());
+                            continue;
+                        }
                         newMap.forEach((key, value) -> map.merge(key, value, (v1, v2) -> v2));
 
                         Log.d("Transaction Data: id", map.get("_id"));

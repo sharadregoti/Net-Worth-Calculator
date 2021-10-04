@@ -1,4 +1,4 @@
-package com.example.myapp;
+package com.example.myapp.Utils;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,11 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -22,9 +21,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String SQL_FILE_NAME = "green_money";
 
+    // Table
+    private static final String BANK_ACCOUNTS_TABLE = "bank_accounts";
+    private static final String BANK_ACCOUNTS_C_ID_0 = "id";
+    private static final String BANK_ACCOUNTS_C_BANK_NAME_1 = "bank_name";
+    private static final String BANK_ACCOUNTS_C_BANK_BALANCE_2 = "bank_balance";
+    private static final String BANK_ACCOUNTS_C_BANK_ACCOUNT_NUMBER_3 = "bank_account_number";
+
+    public class BankAccountsHelper {
+        private List<HashMap<String, Object>> bankInfoList = new ArrayList<>();
+
+        public BankAccountsHelper(List<HashMap<String, Object>> l) {
+            this.bankInfoList = l;
+        }
+
+        public int getBankAccountsCount() {
+            return bankInfoList.size();
+        }
+
+        public String getBankName(int position) {
+            return (String) bankInfoList.get(position).get(BANK_ACCOUNTS_C_BANK_NAME_1);
+        }
+
+        public float getBankBalance(int position) {
+            return (float) bankInfoList.get(position).get(BANK_ACCOUNTS_C_BANK_BALANCE_2);
+        }
+    }
+
+    // Table
+    private static final String IN_HAND_CASH_TABLE = "in_hand_cash";
+    private static final String IN_HAND_CASH_C_ID_0 = "id";
+    private static final String IN_HAND_CASH_C_AMOUNT_1 = "amount";
+    private static final String IN_HAND_CASH_C_META_2 = "meta";
+
+
+    // Table
     private static final String LAST_PROCESSED_TRANSACTION_SMS_TABLE = "last_processed_transaction_sms";
     private static final String LAST_UPDATED_TIMESTAMP = "last_update_ts";
 
+    // Table
     private static final String TRANSACTION_SMS_TABLE = "transactions";
     private static final String ID_0 = "id";
     private static final String SMS_ID_1 = "sms_id";
@@ -67,6 +102,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "last_update_ts INTEGER)";
         db.execSQL(query.toString());
+
+        query = "CREATE TABLE IF NOT EXISTS " + IN_HAND_CASH_TABLE + " ( " +
+                IN_HAND_CASH_C_ID_0 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                IN_HAND_CASH_C_AMOUNT_1 + " REAL, " +
+                IN_HAND_CASH_C_META_2 + " TEXT )";
+
+        query = "CREATE TABLE IF NOT EXISTS " + BANK_ACCOUNTS_TABLE + " ( " +
+                BANK_ACCOUNTS_C_ID_0 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                BANK_ACCOUNTS_C_BANK_NAME_1 + " TEXT UNIQUE, " +
+                BANK_ACCOUNTS_C_BANK_BALANCE_2 + " REAL, " +
+                BANK_ACCOUNTS_C_BANK_ACCOUNT_NUMBER_3 + " TEXT )";
+        db.execSQL(query.toString());
     }
 
     @Override
@@ -95,13 +142,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (result != -1);
     }
 
+    public void deleteBankAccount(String bankName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(BANK_ACCOUNTS_TABLE, String.format("%s = ?", BANK_ACCOUNTS_C_BANK_NAME_1), new String[]{bankName});
+    }
+
+    public BankAccountsHelper getAllBankInfo() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = SQLiteQueryBuilder.buildQueryString(false, BANK_ACCOUNTS_TABLE, new String[]{"*"}, "", "", "", "", "");
+        Cursor data = db.rawQuery(query, null);
+
+        // Iterate & store data in list
+        List<HashMap<String, Object>> list = new ArrayList<>();
+        while (data.moveToNext()) {
+
+            HashMap<String, Object> map = new HashMap<>();
+            map.put(BANK_ACCOUNTS_C_ID_0, data.getInt(0));
+            map.put(BANK_ACCOUNTS_C_BANK_NAME_1, data.getString(1));
+            map.put(BANK_ACCOUNTS_C_BANK_BALANCE_2, data.getFloat(2));
+            map.put(BANK_ACCOUNTS_C_BANK_ACCOUNT_NUMBER_3, data.getString(3));
+            list.add(map);
+
+        }
+        data.close();
+
+        return new BankAccountsHelper(list);
+    }
+
+    // public void updateBankBalance(Float bankBalance, String bankName) {
+    //     SQLiteDatabase db = this.getWritableDatabase();
+    //     ContentValues cv = new ContentValues();
+    //     cv.put(BANK_ACCOUNTS_C_BANK_BALANCE_2, bankBalance);
+    //     db.update(BANK_ACCOUNTS_TABLE, cv, String.format("%s = ?", BANK_ACCOUNTS_C_BANK_NAME_1), new String[]{bankName});
+    // }
+    //
+    // public void insertBankAccount(Float bankBalance, String bankName) {
+    //     SQLiteDatabase db = this.getWritableDatabase();
+    //     ContentValues cv = new ContentValues();
+    //     cv.put(BANK_ACCOUNTS_C_BANK_BALANCE_2, bankBalance);
+    //     cv.put(BANK_ACCOUNTS_C_BANK_NAME_1, bankName);
+    //     db.insert(BANK_ACCOUNTS_TABLE, null, cv);
+    // }
+
+    public void upsertBankAccount(Float bankBalance, String bankName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(BANK_ACCOUNTS_C_BANK_BALANCE_2, bankBalance);
+        cv.put(BANK_ACCOUNTS_C_BANK_NAME_1, bankName);
+        cv.put(BANK_ACCOUNTS_C_BANK_ACCOUNT_NUMBER_3, "");
+        db.insertWithOnConflict(BANK_ACCOUNTS_TABLE, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
     public ArrayList<String> getListOfBanks() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = SQLiteQueryBuilder.buildQueryString(true, TRANSACTION_SMS_TABLE, new String[]{BANK_7}, "", "", "", "", "");
+        String query = SQLiteQueryBuilder.buildQueryString(true, TRANSACTION_SMS_TABLE, new String[]{BANK_7}, String.format("%s = \"%s\"", PAYMENT_TYPE_12, Constants.PAYMENT_TYPE_ONLINE), "", "", "", "");
         Cursor data = db.rawQuery(query, null);
         ArrayList<String> arr = new ArrayList<>();
         // TODO: Some exception handling
-        if (data.moveToNext()) {
+        while (data.moveToNext()) {
             arr.add(data.getString(0));
         }
         data.close();
@@ -123,6 +221,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public int deleteProcessedTxnSMS(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TRANSACTION_SMS_TABLE, "id = ?", new String[]{id});
+    }
+
+    public String getInHandCashAmount() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = SQLiteQueryBuilder.buildQueryString(false, IN_HAND_CASH_TABLE, new String[]{IN_HAND_CASH_C_AMOUNT_1}, "", "", "", IN_HAND_CASH_C_ID_0 + " DESC", "1");
+        Cursor data = db.rawQuery(query, null);
+        // TODO: Some exception handling
+        if (data.moveToNext()) {
+            return data.getString(0);
+        }
+        data.close();
+        return "";
+    }
+
+    // public void insertInHandCashAutoUpdateAmount(Float amount, String meta) {
+    //     SQLiteDatabase db = this.getWritableDatabase();
+    //     ContentValues cv = new ContentValues();
+    //     String query = "Insert into " + IN_HAND_CASH_TABLE + " ( " +
+    //             IN_HAND_CASH_C_AMOUNT_1 + " , " + IN_HAND_CASH_C_META_2 + " ) " +
+    //             "values ((" + getInHandCashQuery + ") - 150, " + Utils.IN_HAND_CASH_AUTOMATICALLY_DEBITED + ")";
+    //     db.query
+    //     db.insert(IN_HAND_CASH_TABLE, null, cv);
+    // }
+
+    public void insertInHandCashAmount(Float amount, String meta) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(IN_HAND_CASH_C_AMOUNT_1, amount);
+        cv.put(IN_HAND_CASH_C_META_2, meta);
+        db.insert(IN_HAND_CASH_TABLE, null, cv);
     }
 
     public String getLastProcessedTxnSMSDate() {
@@ -149,7 +277,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public float calculateIncome(String whereClause) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT SUM(amount) FROM " + TRANSACTION_SMS_TABLE + " WHERE transaction_type = ? and " + whereClause;
-        Cursor data = db.rawQuery(query, new String[]{Utils.TXN_TYPE_CREDITED});
+        Cursor data = db.rawQuery(query, new String[]{Constants.TXN_TYPE_CREDITED});
         float income = 0;
         while (data.moveToNext()) {
             income = data.getFloat(0);
@@ -161,7 +289,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public float calculateExpense(String whereClause) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT SUM(amount) FROM " + TRANSACTION_SMS_TABLE + " WHERE transaction_type = ? and " + whereClause;
-        Cursor data = db.rawQuery(query, new String[]{Utils.TXN_TYPE_DEBITED});
+        Cursor data = db.rawQuery(query, new String[]{Constants.TXN_TYPE_DEBITED});
         float expense = 0;
         while (data.moveToNext()) {
             expense = data.getFloat(0);
@@ -173,7 +301,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public float calculateInHandCash(String whereClause) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT SUM(amount) FROM " + TRANSACTION_SMS_TABLE + " WHERE transaction_type = ? and " + whereClause;
-        Cursor data = db.rawQuery(query, new String[]{Utils.TXN_TYPE_IN_HAND_CASH});
+        Cursor data = db.rawQuery(query, new String[]{Constants.TXN_TYPE_IN_HAND_CASH});
         float inHandCash = 0;
         while (data.moveToNext()) {
             inHandCash = data.getFloat(0);
@@ -183,16 +311,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public StoreFilteredTransactionResult getFilteredTransactions(String startDate, String endDate, ArrayList<String> banks, ArrayList<String> paymentType, ArrayList<String> transactionType) {
-        String dateQuery = "", ptQuery = "", ttQuery = "";
+        String dateQuery = "", ptQuery = "", ttQuery = "", bQuery = "";
         ArrayList<String> finalArr = new ArrayList<String>();
         if (!Objects.equals(startDate, "") && !Objects.equals(endDate, "")) {
-            dateQuery += "(date > \"" + startDate + "\" AND date < \"" + endDate + "\")";
+            dateQuery += "(date >= \"" + startDate + "\" AND date <= \"" + endDate + "\")";
             finalArr.add(dateQuery);
         } else {
             //      Use default filter of current month
-            Long sl = LocalDateTime.now().withDayOfMonth(1).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
+            Long sl = LocalDate.now().atTime(0, 0, 0).withDayOfMonth(1).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
             Long el = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
-            dateQuery += "(date > \"" + sl + "\" AND date < \"" + el + "\")";
+            dateQuery += "(date >= \"" + sl + "\" AND date <= \"" + el + "\")";
             finalArr.add(dateQuery);
         }
 
@@ -222,6 +350,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             temp = temp.substring(0, temp.length() - 2);
             ttQuery += "(" + temp + ")";
             finalArr.add(ttQuery);
+        }
+
+
+        if (banks.size() == 1) {
+            bQuery += "(bank_name = \"" + banks.get(0) + "\")";
+            finalArr.add(bQuery);
+        } else if (banks.size() > 1) {
+            String temp = "";
+            for (int i = 0; i < banks.size(); i++) {
+                temp += " bank_name = \"" + banks.get(i) + "\" OR";
+            }
+            // remove the last or
+            temp = temp.substring(0, temp.length() - 2);
+            bQuery += "(" + temp + ")";
+            finalArr.add(bQuery);
         }
 
         String whereClause = "";

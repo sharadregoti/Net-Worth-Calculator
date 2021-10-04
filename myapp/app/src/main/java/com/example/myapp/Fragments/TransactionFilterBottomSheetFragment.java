@@ -1,14 +1,16 @@
-package com.example.myapp;
+package com.example.myapp.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.core.util.Pair;
 
+import com.example.myapp.Utils.Constants;
+import com.example.myapp.Utils.DatabaseHelper;
+import com.example.myapp.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
@@ -17,6 +19,7 @@ import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -26,7 +29,7 @@ public class TransactionFilterBottomSheetFragment extends BottomSheetDialogFragm
     private BottomSheetListener mListener;
 
     private ArrayList<String> currentBankFilter = new ArrayList<>(), currentTxnTypeFilter = new ArrayList<>(), currentPaymentTypeFilter = new ArrayList<>();
-    private String currentDateFilter = Utils.FILTER_DEFAULT_DATE;
+    private String currentDateFilter = Constants.FILTER_DEFAULT_DATE;
     private String currentStartDate = "";
     private String currentEndDate = "";
     private String currentCustomDateText = "";
@@ -63,39 +66,39 @@ public class TransactionFilterBottomSheetFragment extends BottomSheetDialogFragm
 
         // Initialize prev values
         switch (currentDateFilter) {
-            case Utils.FILTER_LAST_WEEK:
+            case Constants.FILTER_LAST_WEEK:
                 filter_date_last_week.setChecked(true);
                 break;
-            case Utils.FILTER_LAST_2_WEEK:
+            case Constants.FILTER_LAST_2_WEEK:
                 filter_date_last_2_week.setChecked(true);
                 break;
-            case Utils.FILTER_LAST_MONTH:
+            case Constants.FILTER_LAST_MONTH:
                 filter_date_last_month.setChecked(true);
                 break;
-            case Utils.FILTER_LAST_3_MONTH:
+            case Constants.FILTER_LAST_3_MONTH:
                 filter_date_last_3_month.setChecked(true);
                 break;
-            case Utils.FILTER_CUSTOM_DATE:
+            case Constants.FILTER_CUSTOM_DATE:
                 filter_date_custom_date.setChecked(true);
                 break;
         }
 
         for (int i = 0; i < currentPaymentTypeFilter.size(); i++) {
             switch (currentPaymentTypeFilter.get(i)) {
-                case Utils.PAYMENT_TYPE_CASH:
+                case Constants.PAYMENT_TYPE_CASH:
                     filter_payment_type_cash.setChecked(true);
                     continue;
-                case Utils.PAYMENT_TYPE_ONLINE:
+                case Constants.PAYMENT_TYPE_ONLINE:
                     filter_payment_type_online.setChecked(true);
             }
         }
 
         for (int i = 0; i < currentTxnTypeFilter.size(); i++) {
             switch (currentTxnTypeFilter.get(i)) {
-                case Utils.TXN_TYPE_CREDITED:
+                case Constants.TXN_TYPE_CREDITED:
                     filter_transaction_type_credit.setChecked(true);
                     continue;
-                case Utils.TXN_TYPE_DEBITED:
+                case Constants.TXN_TYPE_DEBITED:
                     filter_transaction_type_debit.setChecked(true);
             }
         }
@@ -124,7 +127,7 @@ public class TransactionFilterBottomSheetFragment extends BottomSheetDialogFragm
         // MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder.dateRangePicker().build();
         MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
         builder.setCalendarConstraints(constraintsBuilder.build());
-        if (currentDateFilter.equals(Utils.FILTER_CUSTOM_DATE)) {
+        if (currentDateFilter.equals(Constants.FILTER_CUSTOM_DATE)) {
             Pair<Long, Long> drp = new Pair<Long, Long>(Long.valueOf(currentStartDate), Long.valueOf(currentEndDate));
             builder.setSelection(drp);
             filter_date_custom_date.setText(currentCustomDateText);
@@ -170,42 +173,42 @@ public class TransactionFilterBottomSheetFragment extends BottomSheetDialogFragm
                 });
 
                 if (filter_payment_type_cash.isChecked()) {
-                    paymentType.add(Utils.PAYMENT_TYPE_CASH);
+                    paymentType.add(Constants.PAYMENT_TYPE_CASH);
                 }
                 if (filter_payment_type_online.isChecked()) {
-                    paymentType.add(Utils.PAYMENT_TYPE_ONLINE);
+                    paymentType.add(Constants.PAYMENT_TYPE_ONLINE);
                 }
 
                 if (filter_transaction_type_credit.isChecked()) {
-                    transactionType.add(Utils.TXN_TYPE_CREDITED);
+                    transactionType.add(Constants.TXN_TYPE_CREDITED);
                 }
                 if (filter_transaction_type_debit.isChecked()) {
-                    transactionType.add(Utils.TXN_TYPE_DEBITED);
+                    transactionType.add(Constants.TXN_TYPE_DEBITED);
                 }
 
                 String dateFilterType = "";
                 Long endDate = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
                 Long startDate = 0L;
                 if (filter_date_last_week.isChecked()) {
-                    dateFilterType = Utils.FILTER_LAST_WEEK;
+                    dateFilterType = Constants.FILTER_LAST_WEEK;
                     startDate = LocalDateTime.now().atZone(ZoneId.systemDefault()).minusWeeks(1).toEpochSecond() * 1000;
                 } else if (filter_date_last_2_week.isChecked()) {
-                    dateFilterType = Utils.FILTER_LAST_2_WEEK;
+                    dateFilterType = Constants.FILTER_LAST_2_WEEK;
                     startDate = LocalDateTime.now().atZone(ZoneId.systemDefault()).minusWeeks(2).toEpochSecond() * 1000;
                 } else if (filter_date_last_month.isChecked()) {
-                    dateFilterType = Utils.FILTER_LAST_MONTH;
+                    dateFilterType = Constants.FILTER_LAST_MONTH;
                     startDate = LocalDateTime.now().atZone(ZoneId.systemDefault()).minusMonths(1).toEpochSecond() * 1000;
                 } else if (filter_date_last_3_month.isChecked()) {
-                    dateFilterType = Utils.FILTER_LAST_3_MONTH;
+                    dateFilterType = Constants.FILTER_LAST_3_MONTH;
                     startDate = LocalDateTime.now().atZone(ZoneId.systemDefault()).minusMonths(3).toEpochSecond() * 1000;
                 } else if (filter_date_custom_date.isChecked()) {
-                    dateFilterType = Utils.FILTER_CUSTOM_DATE;
+                    dateFilterType = Constants.FILTER_CUSTOM_DATE;
                     Pair<Long, Long> da = (Pair<Long, Long>) materialDatePicker.getSelection();
                     startDate = da.first;
                     endDate = da.second;
                 } else {
-                    dateFilterType = Utils.FILTER_DEFAULT_DATE;
-                    startDate = LocalDateTime.now().withDayOfMonth(1).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
+                    dateFilterType = Constants.FILTER_DEFAULT_DATE;
+                    startDate = LocalDate.now().atTime(0, 0, 0).withDayOfMonth(1).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
                 }
 
                 mListener.onSaveButtonClicked(dateFilterType, customDateText[0], String.valueOf(startDate), String.valueOf(endDate), banks, paymentType, transactionType);
@@ -216,9 +219,9 @@ public class TransactionFilterBottomSheetFragment extends BottomSheetDialogFragm
             @Override
             public void onClick(View view) {
                 Long endDate = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
-                Long startDate = LocalDateTime.now().withDayOfMonth(1).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
+                Long startDate = LocalDate.now().atTime(0, 0, 0).withDayOfMonth(1).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
                 // The default filter is applied
-                mListener.onSaveButtonClicked(Utils.FILTER_DEFAULT_DATE, "", String.valueOf(startDate), String.valueOf(endDate), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                mListener.onSaveButtonClicked(Constants.FILTER_DEFAULT_DATE, "", String.valueOf(startDate), String.valueOf(endDate), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
                 dismiss();
             }
         });

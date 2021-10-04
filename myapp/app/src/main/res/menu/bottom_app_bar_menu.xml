@@ -5,12 +5,12 @@
 
     <item
         android:id="@+id/bottom_menu_home"
-        android:icon="@drawable/dashboard"
+        android:icon="@drawable/bottom_app_bar_home_icon"
         android:title="Home" />
 
     <item
         android:id="@+id/bottom_menu_activities"
-        android:icon="@drawable/transaction_wallet"
+        android:icon="@drawable/activity_home_investments_bank_accounts_icon"
         android:visible="true"
         android:title="Activites" />
 
@@ -21,11 +21,11 @@
 
     <item
         android:id="@+id/bottom_menu_privacy"
-        android:icon="@drawable/privacy"
+        android:icon="@drawable/bottom_app_bar_privacy_icon"
         android:title="Privacy" />
 
     <item
         android:id="@+id/bottom_menu_settings"
-        android:icon="@drawable/settings"
+        android:icon="@drawable/bottom_app_bar_settings_icon"
         android:title="Settings" />
 </menu>

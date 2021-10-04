@@ -2,6 +2,7 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
         <item name="colorPrimary">#6200ee</item>
     </style>
@@ -11,7 +12,8 @@
     </style>
 
     <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/transaction_filter_background_rounder_corners</item>
+        <item name="android:background">@drawable/transaction_filter_background_rounder_corners
+        </item>
     </style>
 
     <style name="TextAppearance.MdcTypographyStyles.Headline1" parent="TextAppearance.MaterialComponents.Headline1">

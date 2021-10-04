@@ -11,19 +11,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Activities.ActivityBanksRefreshBalance"></activity>
+        <activity android:name=".Activities.ActivityCrypto" />
+        <activity android:name=".Activities.ActivityBanks" />
         <activity
-            android:name=".ActivitySettings"
+            android:name=".Activities.ActivityStocks"
+            android:label="@string/title_activity_stocks"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.ActivityMutualFund" />
+        <activity android:name=".Activities.ActivityUpdateInHandCash" />
+        <activity
+            android:name=".Activities.ActivitySettings"
             android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ActivityPrivacy"
+            android:name=".Activities.ActivityPrivacy"
             android:label="@string/title_activity_privacy"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ActivityAddCashTransaction" />
-        <activity android:name=".ActivityDetailedTransactionItem" />
-        <activity android:name=".ActivityTransactions" />
+        <activity android:name=".Activities.ActivityAddCashTransaction" />
+        <activity android:name=".Activities.ActivityDetailedTransactionItem" />
+        <activity android:name=".Activities.ActivityTransactions" />
         <activity
-            android:name=".ActivityHome"
+            android:name=".Activities.ActivityHome"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

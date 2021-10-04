@@ -1,29 +1,25 @@
-package com.example.myapp;
+package com.example.myapp.Adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapp.Activities.ActivityDetailedTransactionItem;
+import com.example.myapp.Utils.Constants;
+import com.example.myapp.Utils.DatabaseHelper;
+import com.example.myapp.Utils.ProcessSMS;
+import com.example.myapp.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.text.DecimalFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
 
 public class TransactionsRecycleAdapter extends RecyclerView.Adapter<TransactionsRecycleAdapter.RecycleViewHolder> {
 
@@ -63,7 +59,7 @@ public class TransactionsRecycleAdapter extends RecyclerView.Adapter<Transaction
         String byFromPerson = "";
         int amountTextColor = 0;
 
-        if (processSMS.getType(position).equals(Utils.TXN_TYPE_CREDITED)) {
+        if (processSMS.getType(position).equals(Constants.TXN_TYPE_CREDITED)) {
             amount = "+ ₹" + df.format(price);
             byFromPerson = "Credited by";
             amountTextColor = this.context.getColor(R.color.green_money);

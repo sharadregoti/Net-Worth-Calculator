@@ -125,6 +125,7 @@
 
                 <!-- Title, secondary and supporting text -->
                 <TextView
+                    android:id="@+id/detailed_transaction_activity_sms_head_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="SMS"
@@ -136,13 +137,36 @@
                     android:layout_marginTop="8dp"
                     android:background="?android:attr/dividerVertical" />
 
-                <TextView
-                    android:id="@+id/detailed_transaction_activity_bank_name"
-                    style="@style/TextAppearance.MaterialComponents.Subtitle2"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="State Bank Of India" />
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/detailed_transaction_activity_bank_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="center"
+                        android:src="@drawable/bank_logo_sbi" />
+
+                    <TextView
+                        android:id="@+id/detailed_transaction_activity_sms_bank_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="16dp"
+                        android:gravity="start"
+                        android:text="SBI"
+                        android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="?android:attr/dividerVertical" />
 
                 <TextView
                     android:id="@+id/detailed_transaction_activity_sms_body"
@@ -154,45 +178,6 @@
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-
-
-        <!--        <com.google.android.material.card.MaterialCardView-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginBottom="16dp">-->
-
-        <!--            <LinearLayout-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:orientation="vertical">-->
-
-        <!--                <TextView-->
-        <!--                    style="@style/TextAppearance.MaterialComponents.Subtitle2"-->
-        <!--                    android:layout_width="match_parent"-->
-        <!--                    android:layout_height="wrap_content"-->
-        <!--                    android:layout_marginBottom="8dp"-->
-        <!--                    android:gravity="center_vertical"-->
-        <!--                    android:text="Tags" />-->
-
-
-        <!--                <com.google.android.material.chip.ChipGroup-->
-        <!--                    android:layout_width="match_parent"-->
-        <!--                    android:layout_height="wrap_content">-->
-
-        <!--                    <com.google.android.material.chip.Chip-->
-        <!--                        android:layout_width="wrap_content"-->
-        <!--                        android:layout_height="wrap_content"-->
-        <!--                        android:text="UPI" />-->
-
-        <!--                    <com.google.android.material.chip.Chip-->
-        <!--                        android:layout_width="wrap_content"-->
-        <!--                        android:layout_height="wrap_content"-->
-        <!--                        android:text="Payment" />-->
-        <!--                </com.google.android.material.chip.ChipGroup>-->
-
-        <!--            </LinearLayout>-->
-
-        <!--        </com.google.android.material.card.MaterialCardView>-->
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,4 +4,5 @@
     <color name="red_money">#db1115</color>
     <color name="green_money">#118C4F</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="window_background">#F5F9F9</color>
 </resources>

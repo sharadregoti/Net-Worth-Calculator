@@ -1,4 +1,4 @@
-package com.example.myapp;
+package com.example.myapp.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,9 @@ import android.widget.AutoCompleteTextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapp.R;
+import com.example.myapp.Utils.Constants;
+import com.example.myapp.Utils.Functions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -26,7 +29,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Calendar;
 
 public class ActivityAddCashTransaction extends AppCompatActivity {
 
@@ -105,12 +107,12 @@ public class ActivityAddCashTransaction extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // Transaction type options
-        String[] transactionTypes = new String[]{Utils.TXN_TYPE_CREDITED, Utils.TXN_TYPE_DEBITED};
+        String[] transactionTypes = new String[]{Constants.TXN_TYPE_CREDITED, Constants.TXN_TYPE_DEBITED};
         ArrayAdapter ttArrayAdapter = new ArrayAdapter(this, R.layout.transaction_type_drop_down_item, transactionTypes);
         actTxnType.setAdapter(ttArrayAdapter);
 
         // Category options
-        String[] categories = new String[]{Utils.TXN_CATEGORY_BEAUTY_FITNESS, Utils.TXN_CATEGORY_BILLS, Utils.TXN_CATEGORY_EMI, Utils.TXN_CATEGORY_EATING, Utils.TXN_CATEGORY_EDUCATION, Utils.TXN_CATEGORY_ENTERTAINMENT, Utils.TXN_CATEGORY_GROCERY, Utils.TXN_CATEGORY_HOUSEHOLD, Utils.TXN_CATEGORY_INSURANCE, Utils.TXN_CATEGORY_INVESTMENTS, Utils.TXN_CATEGORY_MEDICAL, Utils.TXN_CATEGORY_MISCELLANEOUS, Utils.TXN_CATEGORY_RENT, Utils.TXN_CATEGORY_SHOPPING, Utils.TXN_CATEGORY_TRANSPORT, Utils.TXN_CATEGORY_TRAVEL,};
+        String[] categories = new String[]{Constants.TXN_CATEGORY_BEAUTY_FITNESS, Constants.TXN_CATEGORY_BILLS, Constants.TXN_CATEGORY_EMI, Constants.TXN_CATEGORY_EATING, Constants.TXN_CATEGORY_EDUCATION, Constants.TXN_CATEGORY_ENTERTAINMENT, Constants.TXN_CATEGORY_GROCERY, Constants.TXN_CATEGORY_HOUSEHOLD, Constants.TXN_CATEGORY_INSURANCE, Constants.TXN_CATEGORY_INVESTMENTS, Constants.TXN_CATEGORY_MEDICAL, Constants.TXN_CATEGORY_MISCELLANEOUS, Constants.TXN_CATEGORY_RENT, Constants.TXN_CATEGORY_SHOPPING, Constants.TXN_CATEGORY_TRANSPORT, Constants.TXN_CATEGORY_TRAVEL,};
         ArrayAdapter cArrayAdapter = new ArrayAdapter(this, R.layout.edit_text_drop_down_style, categories);
         actCategory.setAdapter(cArrayAdapter);
 
@@ -181,7 +183,7 @@ public class ActivityAddCashTransaction extends AppCompatActivity {
                 String date = etTxnDate.getText().toString();
                 String tt = actTxnType.getText().toString();
                 String category = actCategory.getText().toString();
-                String expenseMerch = Utils.toTitleCase(etExpenseMerch.getText().toString());
+                String expenseMerch = Functions.toTitleCase(etExpenseMerch.getText().toString());
                 String note = etNotes.getText().toString();
 
                 if (amount.isEmpty()) {

@@ -13,7 +13,12 @@
                 motion:motionTarget="@+id/materialCardView" />
         </KeyFrameSet>
         <OnSwipe
-            motion:touchAnchorSide="bottom" />
+            motion:dragDirection="dragUp"
+            motion:dragScale="1"
+            motion:moveWhenScrollAtTop="true"
+            motion:onTouchUp="stop"
+            motion:touchAnchorId="@id/sms_msg_list_linear"
+            motion:touchAnchorSide="top" />
     </Transition>
 
     <ConstraintSet android:id="@+id/start">

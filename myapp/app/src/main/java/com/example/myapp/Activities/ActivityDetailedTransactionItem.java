@@ -1,4 +1,4 @@
-package com.example.myapp;
+package com.example.myapp.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
@@ -15,6 +16,10 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapp.R;
+import com.example.myapp.Utils.Constants;
+import com.example.myapp.Utils.DatabaseHelper;
+import com.example.myapp.Utils.Functions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -24,9 +29,10 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
 public class ActivityDetailedTransactionItem extends AppCompatActivity {
-
+    private HashMap<String, Integer> supportedBanks = new HashMap<>();
     private boolean isDataUpdated = false;
 
     @Override
@@ -34,13 +40,15 @@ public class ActivityDetailedTransactionItem extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transactions_detailed_transaction_item_page);
 
+        supportedBanks.put("SBI", R.drawable.bank_logo_sbi);
+        supportedBanks.put("ICICI", R.drawable.bank_logo_icici);
+
         // Set top app bar
         MaterialToolbar mt = findViewById(R.id.top_action_bar);
         mt.setTitle("");
         setSupportActionBar(mt);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         Bundle extras = getIntent().getExtras();
         String amount = extras.getString("amount");
         String date = extras.getString("date");
@@ -60,16 +68,22 @@ public class ActivityDetailedTransactionItem extends AppCompatActivity {
         TextView tAmount = findViewById(R.id.reusable_card_view_sms_amount);
         TextView tDate = findViewById(R.id.reusable_card_view_sms_date);
         TextView tExpMerch = findViewById(R.id.reusable_card_view_sms_expense_merchant);
-        TextView tBank = findViewById(R.id.detailed_transaction_activity_bank_name);
+        TextView tBank = findViewById(R.id.detailed_transaction_activity_sms_head_text);
         TextView tByFromWhom = findViewById(R.id.reusable_card_view_sms_by_from_whom);
         TextView tSmsBody = findViewById(R.id.detailed_transaction_activity_sms_body);
         TextView tNotes = findViewById(R.id.detailed_transaction_activity_notes);
+        TextView tSmsBankName = findViewById(R.id.detailed_transaction_activity_sms_bank_name);
+        ImageView iBank = findViewById(R.id.detailed_transaction_activity_bank_image);
         ChipGroup cgTags = findViewById(R.id.reusable_card_view_tags_chip_group);
 
         MaterialCardView mcvSms = findViewById(R.id.detailed_transaction_activity_sms_material_card_view);
 
         MaterialButton deleteButton = findViewById(R.id.detailed_transaction_activity_delete_button);
         MaterialButton editButton = findViewById(R.id.detailed_transaction_activity_edit_button);
+
+        if (!bank.equals("")) {
+            iBank.setImageResource(supportedBanks.get(bank));
+        }
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,11 +121,11 @@ public class ActivityDetailedTransactionItem extends AppCompatActivity {
                             Integer amountTextColor = 0;
                             SimpleDateFormat sDate = new SimpleDateFormat("dd MMM YYYY");
                             DecimalFormat df = new DecimalFormat("##,##,##,##,##,##,##0.#");
-                            if (transaction_type.equals(Utils.TXN_TYPE_CREDITED)) {
+                            if (transaction_type.equals(Constants.TXN_TYPE_CREDITED)) {
                                 sAmount = "+ ₹" + df.format(amount);
                                 byFromPerson = "Credited by";
                                 amountTextColor = getColor(R.color.green_money);
-                            } else if (transaction_type.equals(Utils.TXN_TYPE_DEBITED)) {
+                            } else if (transaction_type.equals(Constants.TXN_TYPE_DEBITED)) {
                                 sAmount = "- ₹" + df.format(amount);
                                 byFromPerson = "Debited to";
                                 amountTextColor = getColor(R.color.red_money);
@@ -141,7 +155,7 @@ public class ActivityDetailedTransactionItem extends AppCompatActivity {
                 // 3 is index required to remove +/- space ruppe symbol from text
                 intent.putExtra("amount", amount.substring(3).replace(",", ""));
                 intent.putExtra("date", date);
-                intent.putExtra("transaction_type", Utils.toTitleCase(transactionType));
+                intent.putExtra("transaction_type", Functions.toTitleCase(transactionType));
                 intent.putExtra("category", category);
                 intent.putExtra("expense_merchant", expenseMerchant);
                 intent.putExtra("notes", notes);
@@ -155,9 +169,9 @@ public class ActivityDetailedTransactionItem extends AppCompatActivity {
         tAmount.setTextColor(amountTextColor);
         tDate.setText(date);
         tExpMerch.setText(expenseMerchant);
-        tBank.setText(bank);
+        tSmsBankName.setText(bank);
         tByFromWhom.setText(byFromPerson);
-        if (paymentType.equals(Utils.PAYMENT_TYPE_CASH)) {
+        if (paymentType.equals(Constants.PAYMENT_TYPE_CASH)) {
             mcvSms.setVisibility(View.INVISIBLE);
         }
         tSmsBody.setText(smsMessage);

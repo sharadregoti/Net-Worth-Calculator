@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 
 import androidx.annotation.Nullable;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -46,6 +47,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public float getBankBalance(int position) {
             return (float) bankInfoList.get(position).get(BANK_ACCOUNTS_C_BANK_BALANCE_2);
         }
+
+        public float getCombinedBankBalance() {
+            float total = 0;
+            for (int i = 0; i < bankInfoList.size(); i++) {
+                total += getBankBalance(i);
+            }
+            return total;
+        }
+
+        public List<HashMap<String, Object>> getBankInfoList() {
+            return bankInfoList;
+        }
+
+        public void refreshAccounts() {
+            bankInfoList = getAllBankInfo().getBankInfoList();
+        }
     }
 
     // Table
@@ -54,26 +71,119 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String IN_HAND_CASH_C_AMOUNT_1 = "amount";
     private static final String IN_HAND_CASH_C_META_2 = "meta";
 
-
     // Table
     private static final String LAST_PROCESSED_TRANSACTION_SMS_TABLE = "last_processed_transaction_sms";
-    private static final String LAST_UPDATED_TIMESTAMP = "last_update_ts";
+    private static final String LAST_UPDATED_C_TIMESTAMP = "last_update_ts";
 
     // Table
     private static final String TRANSACTION_SMS_TABLE = "transactions";
-    private static final String ID_0 = "id";
-    private static final String SMS_ID_1 = "sms_id";
-    private static final String SMS_MESSAGE_2 = "sms_message";
-    private static final String AMOUNT_3 = "amount";
-    private static final String DATE_4 = "date";
-    private static final String TRANSACTION_PERSON_5 = "transaction_person";
-    private static final String TRANSACTION_TYPE_6 = "transaction_type";
-    private static final String BANK_7 = "bank_name";
-    private static final String TAGS_8 = "tags";
-    private static final String NOTES_9 = "notes";
-    private static final String IMAGE_REF_10 = "image_ref";
-    private static final String CATEGORY_11 = "category";
-    private static final String PAYMENT_TYPE_12 = "payment_type";
+    private static final String TRANSACTION_SMS_TABLE_C_ID_0 = "id";
+    private static final String TRANSACTION_SMS_TABLE_C_SMS_ID_1 = "sms_id";
+    private static final String TRANSACTION_SMS_TABLE_C_SMS_MESSAGE_2 = "sms_message";
+    private static final String TRANSACTION_SMS_TABLE_C_AMOUNT_3 = "amount";
+    private static final String TRANSACTION_SMS_TABLE_C_DATE_4 = "date";
+    private static final String TRANSACTION_SMS_TABLE_C_TRANSACTION_PERSON_5 = "transaction_person";
+    private static final String TRANSACTION_SMS_TABLE_C_TRANSACTION_TYPE_6 = "transaction_type";
+    private static final String TRANSACTION_SMS_TABLE_C_BANK_7 = "bank_name";
+    private static final String TRANSACTION_SMS_TABLE_C_TAGS_8 = "tags";
+    private static final String TRANSACTION_SMS_TABLE_C_NOTES_9 = "notes";
+    private static final String TRANSACTION_SMS_TABLE_C_IMAGE_REF_10 = "image_ref";
+    private static final String TRANSACTION_SMS_TABLE_C_CATEGORY_11 = "category";
+    private static final String TRANSACTION_SMS_TABLE_C_PAYMENT_TYPE_12 = "payment_type";
+
+    public class StoreProcessedTransactionResult {
+        public float income = 0;
+        public float expense = 0;
+        public float inHandCash = 0;
+        public List<HashMap<String, Object>> txnList = new ArrayList<>();
+
+        public StoreProcessedTransactionResult(float income, float expense, float inHandCash, List<HashMap<String, Object>> filterdList) {
+            this.income = income;
+            this.expense = expense;
+            this.inHandCash = inHandCash;
+            this.txnList = filterdList;
+        }
+
+        public long getDate(int position) {
+            return (long) txnList.get(position).get(TRANSACTION_SMS_TABLE_C_DATE_4);
+        }
+
+        public String getDateStringFormatted(int position) {
+            Long date1 = getDate(position);
+            SimpleDateFormat sdf1 = new SimpleDateFormat("dd MMM YYYY");
+            return sdf1.format(date1);
+        }
+
+        public String getTransactionPerson(int position) {
+            return (String) txnList.get(position).get(TRANSACTION_SMS_TABLE_C_TRANSACTION_PERSON_5);
+        }
+
+        public String getTags(int position) {
+            return (String) txnList.get(position).get(TRANSACTION_SMS_TABLE_C_TAGS_8);
+        }
+
+        public String getBank(int position) {
+            return (String) txnList.get(position).get(TRANSACTION_SMS_TABLE_C_BANK_7);
+        }
+
+        public String getTxnType(int position) {
+            return (String) txnList.get(position).get(TRANSACTION_SMS_TABLE_C_TRANSACTION_TYPE_6);
+        }
+
+        public String getPaymentType(int position) {
+            return (String) txnList.get(position).get(TRANSACTION_SMS_TABLE_C_PAYMENT_TYPE_12);
+        }
+
+        public String getCategory(int position) {
+            return (String) txnList.get(position).get(TRANSACTION_SMS_TABLE_C_CATEGORY_11);
+        }
+
+        public String getPhoto(int position) {
+            // TODO: Implementation remaining
+            return "";
+            // return (String) txnList.get(position).get(TRANS);
+        }
+
+        public int getRowId(int position) {
+            return (int) txnList.get(position).get(TRANSACTION_SMS_TABLE_C_ID_0);
+        }
+
+        public String getNotes(int position) {
+            return (String) txnList.get(position).get(TRANSACTION_SMS_TABLE_C_NOTES_9);
+        }
+
+        public String getSMSBody(int position) {
+            return (String) txnList.get(position).get(TRANSACTION_SMS_TABLE_C_SMS_MESSAGE_2);
+        }
+
+        public float getAmount(int position) {
+            return (float) txnList.get(position).get(TRANSACTION_SMS_TABLE_C_AMOUNT_3);
+        }
+
+        public float getIncome() {
+            return this.income;
+        }
+
+        public float getExpense() {
+            return this.expense;
+        }
+
+        public float getInHandCash() {
+            return this.inHandCash;
+        }
+
+        public List<HashMap<String, Object>> getTransactionList() {
+            return this.txnList;
+        }
+
+        public int getTransactionCount() {
+            return this.txnList.size();
+        }
+
+        public void applyFilter(String startDate, String endDate, ArrayList<String> banks, ArrayList<String> paymentType, ArrayList<String> transactionType) {
+            txnList = getProcessedTransactions(startDate, endDate, banks, paymentType, transactionType).getTransactionList();
+        }
+    }
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, SQL_FILE_NAME, null, 1);
@@ -121,32 +231,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // TODO: whenever a version upgrade is being made, this has to be changed to reflect the db changes
     }
 
-    public boolean addTransactionSMS(float amount, Long date, int smsId, String smsMsg, String tt, String pt, String tp, String tags, String bankName, String notes, String imageRef, String category) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues cv = new ContentValues();
-        cv.put(SMS_ID_1, smsId);
-        cv.put(SMS_MESSAGE_2, smsMsg);
-        cv.put(AMOUNT_3, amount);
-        cv.put(DATE_4, date);
-        cv.put(TRANSACTION_TYPE_6, tt);
-        cv.put(PAYMENT_TYPE_12, pt);
-        cv.put(BANK_7, bankName);
-        cv.put(TAGS_8, tags);
-        cv.put(TRANSACTION_PERSON_5, tp);
-        cv.put(NOTES_9, notes);
-        cv.put(IMAGE_REF_10, imageRef);
-        cv.put(CATEGORY_11, category);
-
-        long result = db.insert(TRANSACTION_SMS_TABLE, null, cv);
-        return (result != -1);
+    public float getNetWorth() {
+        return getAllBankInfo().getCombinedBankBalance();
     }
 
-    public void deleteBankAccount(String bankName) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(BANK_ACCOUNTS_TABLE, String.format("%s = ?", BANK_ACCOUNTS_C_BANK_NAME_1), new String[]{bankName});
-    }
-
+    // Table
     public BankAccountsHelper getAllBankInfo() {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = SQLiteQueryBuilder.buildQueryString(false, BANK_ACCOUNTS_TABLE, new String[]{"*"}, "", "", "", "", "");
@@ -169,20 +258,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return new BankAccountsHelper(list);
     }
 
-    // public void updateBankBalance(Float bankBalance, String bankName) {
-    //     SQLiteDatabase db = this.getWritableDatabase();
-    //     ContentValues cv = new ContentValues();
-    //     cv.put(BANK_ACCOUNTS_C_BANK_BALANCE_2, bankBalance);
-    //     db.update(BANK_ACCOUNTS_TABLE, cv, String.format("%s = ?", BANK_ACCOUNTS_C_BANK_NAME_1), new String[]{bankName});
-    // }
-    //
-    // public void insertBankAccount(Float bankBalance, String bankName) {
-    //     SQLiteDatabase db = this.getWritableDatabase();
-    //     ContentValues cv = new ContentValues();
-    //     cv.put(BANK_ACCOUNTS_C_BANK_BALANCE_2, bankBalance);
-    //     cv.put(BANK_ACCOUNTS_C_BANK_NAME_1, bankName);
-    //     db.insert(BANK_ACCOUNTS_TABLE, null, cv);
-    // }
+    public void deleteBankAccount(String bankName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(BANK_ACCOUNTS_TABLE, String.format("%s = ?", BANK_ACCOUNTS_C_BANK_NAME_1), new String[]{bankName});
+    }
 
     public void upsertBankAccount(Float bankBalance, String bankName) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -193,9 +272,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insertWithOnConflict(BANK_ACCOUNTS_TABLE, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
+    // Table
     public ArrayList<String> getListOfBanks() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = SQLiteQueryBuilder.buildQueryString(true, TRANSACTION_SMS_TABLE, new String[]{BANK_7}, String.format("%s = \"%s\"", PAYMENT_TYPE_12, Constants.PAYMENT_TYPE_ONLINE), "", "", "", "");
+        String query = SQLiteQueryBuilder.buildQueryString(true, TRANSACTION_SMS_TABLE, new String[]{TRANSACTION_SMS_TABLE_C_BANK_7}, String.format("%s = \"%s\"", TRANSACTION_SMS_TABLE_C_PAYMENT_TYPE_12, Constants.PAYMENT_TYPE_ONLINE), "", "", "", "");
         Cursor data = db.rawQuery(query, null);
         ArrayList<String> arr = new ArrayList<>();
         // TODO: Some exception handling
@@ -209,12 +289,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public int updateProcessedTxnSMS(String id, float amount, Long date, String tt, String expenseMerch, String notes, String category) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(AMOUNT_3, amount);
-        cv.put(DATE_4, date);
-        cv.put(TRANSACTION_TYPE_6, tt);
-        cv.put(TRANSACTION_PERSON_5, expenseMerch);
-        cv.put(NOTES_9, notes);
-        cv.put(CATEGORY_11, category);
+        cv.put(TRANSACTION_SMS_TABLE_C_AMOUNT_3, amount);
+        cv.put(TRANSACTION_SMS_TABLE_C_DATE_4, date);
+        cv.put(TRANSACTION_SMS_TABLE_C_TRANSACTION_TYPE_6, tt);
+        cv.put(TRANSACTION_SMS_TABLE_C_TRANSACTION_PERSON_5, expenseMerch);
+        cv.put(TRANSACTION_SMS_TABLE_C_NOTES_9, notes);
+        cv.put(TRANSACTION_SMS_TABLE_C_CATEGORY_11, category);
         return db.update(TRANSACTION_SMS_TABLE, cv, "id = ?", new String[]{id});
     }
 
@@ -223,55 +303,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.delete(TRANSACTION_SMS_TABLE, "id = ?", new String[]{id});
     }
 
-    public String getInHandCashAmount() {
+    public boolean addTransactionSMS(float amount, Long date, int smsId, String smsMsg, String tt, String pt, String tp, String tags, String bankName, String notes, String imageRef, String category) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = SQLiteQueryBuilder.buildQueryString(false, IN_HAND_CASH_TABLE, new String[]{IN_HAND_CASH_C_AMOUNT_1}, "", "", "", IN_HAND_CASH_C_ID_0 + " DESC", "1");
-        Cursor data = db.rawQuery(query, null);
-        // TODO: Some exception handling
-        if (data.moveToNext()) {
-            return data.getString(0);
-        }
-        data.close();
-        return "";
-    }
 
-    // public void insertInHandCashAutoUpdateAmount(Float amount, String meta) {
-    //     SQLiteDatabase db = this.getWritableDatabase();
-    //     ContentValues cv = new ContentValues();
-    //     String query = "Insert into " + IN_HAND_CASH_TABLE + " ( " +
-    //             IN_HAND_CASH_C_AMOUNT_1 + " , " + IN_HAND_CASH_C_META_2 + " ) " +
-    //             "values ((" + getInHandCashQuery + ") - 150, " + Utils.IN_HAND_CASH_AUTOMATICALLY_DEBITED + ")";
-    //     db.query
-    //     db.insert(IN_HAND_CASH_TABLE, null, cv);
-    // }
-
-    public void insertInHandCashAmount(Float amount, String meta) {
-        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(IN_HAND_CASH_C_AMOUNT_1, amount);
-        cv.put(IN_HAND_CASH_C_META_2, meta);
-        db.insert(IN_HAND_CASH_TABLE, null, cv);
-    }
+        cv.put(TRANSACTION_SMS_TABLE_C_SMS_ID_1, smsId);
+        cv.put(TRANSACTION_SMS_TABLE_C_SMS_MESSAGE_2, smsMsg);
+        cv.put(TRANSACTION_SMS_TABLE_C_AMOUNT_3, amount);
+        cv.put(TRANSACTION_SMS_TABLE_C_DATE_4, date);
+        cv.put(TRANSACTION_SMS_TABLE_C_TRANSACTION_TYPE_6, tt);
+        cv.put(TRANSACTION_SMS_TABLE_C_PAYMENT_TYPE_12, pt);
+        cv.put(TRANSACTION_SMS_TABLE_C_BANK_7, bankName);
+        cv.put(TRANSACTION_SMS_TABLE_C_TAGS_8, tags);
+        cv.put(TRANSACTION_SMS_TABLE_C_TRANSACTION_PERSON_5, tp);
+        cv.put(TRANSACTION_SMS_TABLE_C_NOTES_9, notes);
+        cv.put(TRANSACTION_SMS_TABLE_C_IMAGE_REF_10, imageRef);
+        cv.put(TRANSACTION_SMS_TABLE_C_CATEGORY_11, category);
 
-    public String getLastProcessedTxnSMSDate() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String query = SQLiteQueryBuilder.buildQueryString(false, LAST_PROCESSED_TRANSACTION_SMS_TABLE, new String[]{LAST_UPDATED_TIMESTAMP}, "", "", "", "", "1");
-        Cursor data = db.rawQuery(query, null);
-        // TODO: Some exception handling
-        if (data.moveToNext()) {
-            return data.getString(0);
-        }
-        data.close();
-        return "";
-    }
-
-    public void upsertLastProcessedTxnDate() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        long unixTime = System.currentTimeMillis();
-        cv.put(LAST_UPDATED_TIMESTAMP, unixTime);
-        cv.put(ID_0, 1);
-        db.insertWithOnConflict(LAST_PROCESSED_TRANSACTION_SMS_TABLE, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+        long result = db.insert(TRANSACTION_SMS_TABLE, null, cv);
+        return (result != -1);
     }
 
     public float calculateIncome(String whereClause) {
@@ -310,7 +360,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return inHandCash;
     }
 
-    public StoreFilteredTransactionResult getFilteredTransactions(String startDate, String endDate, ArrayList<String> banks, ArrayList<String> paymentType, ArrayList<String> transactionType) {
+    public StoreProcessedTransactionResult getProcessedTransactions(String startDate, String endDate, ArrayList<String> banks, ArrayList<String> paymentType, ArrayList<String> transactionType) {
         String dateQuery = "", ptQuery = "", ttQuery = "", bQuery = "";
         ArrayList<String> finalArr = new ArrayList<String>();
         if (!Objects.equals(startDate, "") && !Objects.equals(endDate, "")) {
@@ -391,24 +441,67 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (data.moveToNext()) {
 
             HashMap<String, Object> map = new HashMap<>();
-            map.put(ID_0, data.getInt(0));
-            map.put(SMS_ID_1, data.getInt(1));
-            map.put(SMS_MESSAGE_2, data.getString(2));
-            map.put(AMOUNT_3, data.getFloat(3));
-            map.put(DATE_4, data.getLong(4));
-            map.put(TRANSACTION_PERSON_5, data.getString(5));
-            map.put(TRANSACTION_TYPE_6, data.getString(6));
-            map.put(BANK_7, data.getString(7));
-            map.put(TAGS_8, data.getString(8));
-            map.put(NOTES_9, data.getString(9));
-            map.put(IMAGE_REF_10, data.getString(10));
-            map.put(CATEGORY_11, data.getString(11));
-            map.put(PAYMENT_TYPE_12, data.getString(12));
+            map.put(TRANSACTION_SMS_TABLE_C_ID_0, data.getInt(0));
+            map.put(TRANSACTION_SMS_TABLE_C_SMS_ID_1, data.getInt(1));
+            map.put(TRANSACTION_SMS_TABLE_C_SMS_MESSAGE_2, data.getString(2));
+            map.put(TRANSACTION_SMS_TABLE_C_AMOUNT_3, data.getFloat(3));
+            map.put(TRANSACTION_SMS_TABLE_C_DATE_4, data.getLong(4));
+            map.put(TRANSACTION_SMS_TABLE_C_TRANSACTION_PERSON_5, data.getString(5));
+            map.put(TRANSACTION_SMS_TABLE_C_TRANSACTION_TYPE_6, data.getString(6));
+            map.put(TRANSACTION_SMS_TABLE_C_BANK_7, data.getString(7));
+            map.put(TRANSACTION_SMS_TABLE_C_TAGS_8, data.getString(8));
+            map.put(TRANSACTION_SMS_TABLE_C_NOTES_9, data.getString(9));
+            map.put(TRANSACTION_SMS_TABLE_C_IMAGE_REF_10, data.getString(10));
+            map.put(TRANSACTION_SMS_TABLE_C_CATEGORY_11, data.getString(11));
+            map.put(TRANSACTION_SMS_TABLE_C_PAYMENT_TYPE_12, data.getString(12));
             list.add(map);
 
         }
         data.close();
 
-        return new StoreFilteredTransactionResult(this.calculateIncome(whereClause), this.calculateExpense(whereClause), this.calculateInHandCash(whereClause), list);
+        return new StoreProcessedTransactionResult(this.calculateIncome(whereClause), this.calculateExpense(whereClause), this.calculateInHandCash(whereClause), list);
+    }
+
+    // Table
+    public String getInHandCashAmount() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = SQLiteQueryBuilder.buildQueryString(false, IN_HAND_CASH_TABLE, new String[]{IN_HAND_CASH_C_AMOUNT_1}, "", "", "", IN_HAND_CASH_C_ID_0 + " DESC", "1");
+        Cursor data = db.rawQuery(query, null);
+        // TODO: Some exception handling
+        if (data.moveToNext()) {
+            return data.getString(0);
+        }
+        data.close();
+        return "";
+    }
+
+    public void insertInHandCashAmount(Float amount, String meta) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(IN_HAND_CASH_C_AMOUNT_1, amount);
+        cv.put(IN_HAND_CASH_C_META_2, meta);
+        db.insert(IN_HAND_CASH_TABLE, null, cv);
+    }
+
+    // Table
+    public String getLastProcessedTxnSMSDate() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = SQLiteQueryBuilder.buildQueryString(false, LAST_PROCESSED_TRANSACTION_SMS_TABLE, new String[]{LAST_UPDATED_C_TIMESTAMP}, "", "", "", "", "1");
+        Cursor data = db.rawQuery(query, null);
+        // TODO: Some exception handling
+        if (data.moveToNext()) {
+            return data.getString(0);
+        }
+        data.close();
+        return "";
+    }
+
+    public void upsertLastProcessedTxnDate() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        long unixTime = System.currentTimeMillis();
+        cv.put(LAST_UPDATED_C_TIMESTAMP, unixTime);
+        cv.put(TRANSACTION_SMS_TABLE_C_ID_0, 1);
+        db.insertWithOnConflict(LAST_PROCESSED_TRANSACTION_SMS_TABLE, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
     }
 }

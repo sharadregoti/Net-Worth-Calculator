@@ -3,10 +3,13 @@ package com.example.myapp.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapp.R;
+import com.example.myapp.Utils.DatabaseHelper;
+import com.example.myapp.Utils.Functions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ActivityHome extends AppCompatActivity {
@@ -23,6 +26,11 @@ public class ActivityHome extends AppCompatActivity {
         LinearLayout llBanks = findViewById(R.id.home_activity_banks_layout);
         LinearLayout llCrypto = findViewById(R.id.home_activity_crypto_layout);
         LinearLayout llStocks = findViewById(R.id.home_activity_stocks_layout);
+        TextView tNetWorthAmount = findViewById(R.id.home_activity_net_worth_amount);
+
+        DatabaseHelper dh = new DatabaseHelper(this);
+
+        tNetWorthAmount.setText(Functions.format((long) dh.getNetWorth()));
 
         llMutualFund.setOnClickListener(view -> {
             Intent intent = new Intent(ActivityHome.this, ActivityMutualFund.class);

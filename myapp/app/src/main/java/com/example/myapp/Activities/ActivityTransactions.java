@@ -53,7 +53,8 @@ public class ActivityTransactions extends AppCompatActivity implements Transacti
     // Indicates the count of total filter applied (Max 4)
     private int appliedFilterCount = 0;
 
-    ProcessSMS smsProcessSMS;
+    DatabaseHelper.StoreProcessedTransactionResult processedTxns;
+    // ProcessSMS smsProcessor;
     DatabaseHelper dh;
     TransactionsRecycleAdapter transactionsRecycleAdapter;
 
@@ -75,8 +76,9 @@ public class ActivityTransactions extends AppCompatActivity implements Transacti
         TextView tvInHandCashUpdate = findViewById(R.id.transaction_activity_set_in_hand_cash_update_text);
         transactionRecyclerView = findViewById(R.id.transaction_activity_recycler_view);
 
+        new ProcessSMS(this);
         dh = new DatabaseHelper(this);
-        smsProcessSMS = new ProcessSMS(ActivityTransactions.this);
+        processedTxns = dh.getProcessedTransactions("", "", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         // Set back button
         MaterialToolbar mt = findViewById(R.id.top_action_bar);
@@ -118,7 +120,7 @@ public class ActivityTransactions extends AppCompatActivity implements Transacti
 
         // Set recycle view adapter
         transactionRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        transactionsRecycleAdapter = new TransactionsRecycleAdapter(this, smsProcessSMS, handleDetailedTxnActivityResult);
+        transactionsRecycleAdapter = new TransactionsRecycleAdapter(this, processedTxns, handleDetailedTxnActivityResult);
         transactionRecyclerView.setAdapter(transactionsRecycleAdapter);
 
         // Process the edit text fields of add cash txn activity, whenever save button is clicked
@@ -135,7 +137,7 @@ public class ActivityTransactions extends AppCompatActivity implements Transacti
                         String note = data.getStringExtra("note");
 
                         // TODO: take care of filters & name lowercase & uppsercase
-                        if (smsProcessSMS.addTransaction(amount, date, 0, "", transaction_type, Constants.PAYMENT_TYPE_CASH, expense_merch, "Offline", "", note, "", category)) {
+                        if (dh.addTransactionSMS(amount, date, 0, "", transaction_type, Constants.PAYMENT_TYPE_CASH, expense_merch, "Offline", "", note, "", category)) {
                             Log.d("Add cash txn: ", "Added data successfully");
                             if (transaction_type.equals(Constants.TXN_TYPE_DEBITED)) {
                                 String amt = dh.getInHandCashAmount();
@@ -271,7 +273,7 @@ public class ActivityTransactions extends AppCompatActivity implements Transacti
             this.appliedFilterCount++;
         }
 
-        smsProcessSMS.filterList(startDate, endDate, banks, paymentType, transactionType);
+        processedTxns.applyFilter(startDate, endDate, banks, paymentType, transactionType);
         transactionsRecycleAdapter.notifyDataSetChanged();
         changeTransactionFilterText(Long.parseLong(startDate), Long.parseLong(endDate));
         changeTransactionSummaryText();
@@ -293,10 +295,10 @@ public class ActivityTransactions extends AppCompatActivity implements Transacti
         // Long price = Long.parseLong(amt);
         // CompactDecimalFormat formattedNumber = CompactDecimalFormat.getInstance(Locale.getDefault(), CompactDecimalFormat.CompactStyle.SHORT);
         TextView inHandCashView = findViewById(R.id.transaction_activity_set_in_hand_cash_amount_text);
-        inHandCashView.setText(String.format("+ ₹%s", Functions.format((long) this.smsProcessSMS.calculateInHandCash())));
+        inHandCashView.setText(String.format("+ ₹%s", Functions.format((long) processedTxns.getInHandCash())));
         TextView incomeView = findViewById(R.id.transaction_activity_set_income_amount_text);
-        incomeView.setText(String.format("+ ₹%s", Functions.format((long) this.smsProcessSMS.calculateIncome())));
+        incomeView.setText(String.format("+ ₹%s", Functions.format((long) processedTxns.getIncome())));
         TextView expenseView = findViewById(R.id.transaction_activity_set_expense_amount_text);
-        expenseView.setText(String.format("- ₹%s", Functions.format((long) this.smsProcessSMS.calculateExpense())));
+        expenseView.setText(String.format("- ₹%s", Functions.format((long) processedTxns.getExpense())));
     }
 }

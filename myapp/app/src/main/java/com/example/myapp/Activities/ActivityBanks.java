@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapp.Adapters.BankRecycleAdapter;
 import com.example.myapp.R;
 import com.example.myapp.Utils.DatabaseHelper;
+import com.example.myapp.Utils.Functions;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class ActivityBanks extends AppCompatActivity implements BankRecycleAdapter.BankAdapterListener {
@@ -25,6 +27,7 @@ public class ActivityBanks extends AppCompatActivity implements BankRecycleAdapt
     public DatabaseHelper.BankAccountsHelper bankData;
     DatabaseHelper dh;
     BankRecycleAdapter bankRecycleAdapter;
+    TextView tCombinedBankBalance;
 
     ActivityResultLauncher<Intent> handleBankPopupMenuResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -63,6 +66,7 @@ public class ActivityBanks extends AppCompatActivity implements BankRecycleAdapt
         dh = new DatabaseHelper(this);
         bankData = dh.getAllBankInfo();
 
+        tCombinedBankBalance = findViewById(R.id.bank_activity_bank_balance_amount_text);
         RecyclerView bankRecyclerView = findViewById(R.id.bank_activity_recycler_view);
         // Set recycle view adapter
         bankRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -75,10 +79,14 @@ public class ActivityBanks extends AppCompatActivity implements BankRecycleAdapt
         setSupportActionBar(mt);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        tCombinedBankBalance.setText(Functions.format((long) bankData.getCombinedBankBalance()));
     }
 
     public void refreshRecyclerView() {
-
+        bankData.refreshAccounts();
+        bankRecycleAdapter.notifyDataSetChanged();
+        tCombinedBankBalance.setText(Functions.format((long) bankData.getCombinedBankBalance()));
     }
 
     @Override
@@ -94,8 +102,6 @@ public class ActivityBanks extends AppCompatActivity implements BankRecycleAdapt
     @Override
     public void onDeleteButtonPressed(String bankName) {
         dh.deleteBankAccount(bankName);
-        bankData = dh.getAllBankInfo();
-
-        bankRecycleAdapter.notifyDataSetChanged();
+        refreshRecyclerView();
     }
 }

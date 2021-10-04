@@ -12,12 +12,9 @@ import com.example.myapp.banks.ICICI;
 import com.example.myapp.banks.NotTransactionSMSException;
 import com.example.myapp.banks.StateBankOfIndia;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -26,7 +23,6 @@ public class ProcessSMS {
     // List of supported banks
     private final HashMap<String, String[]> supportedBanks = new HashMap<>();
 
-    private StoreFilteredTransactionResult filteredResult;
     private final Context ctx;
 
     private DatabaseHelper dh;
@@ -36,96 +32,9 @@ public class ProcessSMS {
         this.dh = new DatabaseHelper(ctx);
         this.supportedBanks.put(Constants.BANK_ICICI, new String[]{"ICICIB"});
         this.supportedBanks.put(Constants.BANK_STATE_BANK_OF_INDIA, new String[]{"SBIUPI", "ATMSBI", "SBIATM", "CBSSBI", "SBIPSG", "SBIDGT"});
-//        this.supportedBanks.put(HDFC_BANK, new String[]{"ICICIB"});
-//        this.supportedBanks.put(BANK_OF_INDIA, new String[]{"ICICIB"});
+        this.supportedBanks.put(Constants.BANK_HDFC_BANK, new String[]{"HDFC"});
+        this.supportedBanks.put(Constants.BANK_BANK_OF_INDIA, new String[]{"BOI"});
         processAndStoreSMS();
-    }
-
-    public void filterList(String startDate, String endDate, ArrayList<String> banks, ArrayList<String> paymentType, ArrayList<String> transactionType) {
-        this.filteredResult = this.dh.getFilteredTransactions(startDate, endDate, banks, paymentType, transactionType);
-    }
-
-    public float calculateIncome() {
-        return this.filteredResult.getIncome();
-    }
-
-    public float calculateExpense() {
-        return this.filteredResult.getExpense();
-    }
-
-    public float calculateInHandCash() {
-        return this.filteredResult.getInHandCash();
-    }
-
-    public boolean addTransaction(float amount, Long date, int smsId, String smsMsg, String tt, String pt, String tp, String tags, String bankName, String notes, String imageRef, String category) {
-        return this.dh.addTransactionSMS(amount, date, smsId, smsMsg, tt, pt, tp, tags, bankName, notes, imageRef, category);
-    }
-
-
-    public List getMessages() {
-        return filteredResult.getFilteredList();
-    }
-
-    public String getDate(Integer position) {
-        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
-        Long date1 = (Long) d.get("date");
-        SimpleDateFormat sdf1 = new SimpleDateFormat("dd MMM YYYY");
-        return sdf1.format(date1);
-    }
-
-    public String getAmount(Integer position) {
-        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
-        return d.get("amount").toString();
-    }
-
-    public String getType(Integer position) {
-        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
-        return d.get("transaction_type").toString();
-    }
-
-    public String getPaymentType(Integer position) {
-        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
-        return d.get("payment_type").toString();
-    }
-
-    public String getNotes(Integer position) {
-        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
-        return d.get("notes").toString();
-    }
-
-    public String getPhoto(Integer position) {
-        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
-        return d.get("image_ref").toString();
-    }
-
-    public String getCategory(Integer position) {
-        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
-        return d.get("category").toString();
-    }
-
-    public String getSMSBody(Integer position) {
-        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
-        return d.get("sms_message").toString();
-    }
-
-    public String getRowId(Integer position) {
-        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
-        return d.get("id").toString();
-    }
-
-    public String getBank(Integer position) {
-        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
-        return d.get("bank_name").toString();
-    }
-
-    public String getTransactionPerson(Integer position) {
-        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
-        return d.get("transaction_person").toString();
-    }
-
-    public String getTags(Integer position) {
-        HashMap<String, Object> d = (HashMap<String, Object>) filteredResult.getFilteredList().get(position);
-        return d.get("tags").toString();
     }
 
     private void processAndStoreSMS() {
@@ -226,6 +135,5 @@ public class ProcessSMS {
         }
         // Done
         this.dh.upsertLastProcessedTxnDate();
-        this.filteredResult = this.dh.getFilteredTransactions("", "", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 }

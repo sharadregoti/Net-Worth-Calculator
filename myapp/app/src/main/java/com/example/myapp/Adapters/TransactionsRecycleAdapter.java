@@ -12,10 +12,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapp.Activities.ActivityDetailedTransactionItem;
+import com.example.myapp.R;
 import com.example.myapp.Utils.Constants;
 import com.example.myapp.Utils.DatabaseHelper;
-import com.example.myapp.Utils.ProcessSMS;
-import com.example.myapp.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -23,20 +22,15 @@ import java.text.DecimalFormat;
 
 public class TransactionsRecycleAdapter extends RecyclerView.Adapter<TransactionsRecycleAdapter.RecycleViewHolder> {
 
-    private Context context;
-    private final ProcessSMS processSMS;
-
-    private static final boolean isDefaultFilterEnabled = true;
-
-    private DatabaseHelper dh;
-    private ActivityResultLauncher<Intent> hdta;
+    private final Context context;
+    private final DatabaseHelper.StoreProcessedTransactionResult processedTxns;
+    private final ActivityResultLauncher<Intent> hdta;
 
 
-    public TransactionsRecycleAdapter(Context context, ProcessSMS processSMS, ActivityResultLauncher<Intent> hdta) {
-        this.processSMS = processSMS;
+    public TransactionsRecycleAdapter(Context context, DatabaseHelper.StoreProcessedTransactionResult processedTxns, ActivityResultLauncher<Intent> hdta) {
+        this.processedTxns = processedTxns;
         this.context = context;
         this.hdta = hdta;
-        this.dh = new DatabaseHelper(context);
     }
 
     @Override
@@ -49,17 +43,17 @@ public class TransactionsRecycleAdapter extends RecyclerView.Adapter<Transaction
     @Override
     public void onBindViewHolder(TransactionsRecycleAdapter.RecycleViewHolder holder, int position) {
         DecimalFormat df = new DecimalFormat("##,##,##,##,##,##,##0.#");
-        Float price = Float.parseFloat(processSMS.getAmount(position));
+        Float price = processedTxns.getAmount(position);
 
         String amount = "";
-        String date = processSMS.getDate(position);
-        String expenseMerch = processSMS.getTransactionPerson(position);
-        String tags = processSMS.getTags(position);
-        String bank = processSMS.getBank(position);
+        String date = processedTxns.getDateStringFormatted(position);
+        String expenseMerch = processedTxns.getTransactionPerson(position);
+        String tags = processedTxns.getTags(position);
+        String bank = processedTxns.getBank(position);
         String byFromPerson = "";
         int amountTextColor = 0;
 
-        if (processSMS.getType(position).equals(Constants.TXN_TYPE_CREDITED)) {
+        if (processedTxns.getTxnType(position).equals(Constants.TXN_TYPE_CREDITED)) {
             amount = "+ ₹" + df.format(price);
             byFromPerson = "Credited by";
             amountTextColor = this.context.getColor(R.color.green_money);
@@ -99,21 +93,20 @@ public class TransactionsRecycleAdapter extends RecyclerView.Adapter<Transaction
             intent.putExtra("bank", bank);
             intent.putExtra("by_from_person", finalByFromPerson);
             intent.putExtra("amount_text_color", finalAmountTextColor);
-            intent.putExtra("transaction_type", processSMS.getType(position));
-            intent.putExtra("payment_type", processSMS.getPaymentType(position));
-            intent.putExtra("category", processSMS.getCategory(position));
-            intent.putExtra("notes", processSMS.getNotes(position));
-            intent.putExtra("photo", processSMS.getPhoto(position));
-            intent.putExtra("sms_message", processSMS.getSMSBody(position));
-            intent.putExtra("id", processSMS.getRowId(position));
+            intent.putExtra("transaction_type", processedTxns.getTxnType(position));
+            intent.putExtra("payment_type", processedTxns.getPaymentType(position));
+            intent.putExtra("category", processedTxns.getCategory(position));
+            intent.putExtra("notes", processedTxns.getNotes(position));
+            intent.putExtra("photo", processedTxns.getPhoto(position));
+            intent.putExtra("sms_message", processedTxns.getSMSBody(position));
+            intent.putExtra("id", processedTxns.getRowId(position));
             hdta.launch(intent);
-//            this.processSMS.filterList();
         }));
     }
 
     @Override
     public int getItemCount() {
-        return processSMS.getMessages().size();
+        return processedTxns.getTransactionCount();
     }
 
     public class RecycleViewHolder extends RecyclerView.ViewHolder {

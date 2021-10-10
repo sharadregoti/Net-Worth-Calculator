@@ -17,6 +17,25 @@
         android:paddingRight="16dp"
         android:paddingBottom="8dp">
 
+        <!--        <TextView-->
+        <!--            android:layout_width=""-->
+        <!--            android:layout_height=""-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/filter_button_close"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="Close"
+            android:textColor="#000000"
+            app:strokeWidth="0dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/darker_gray" />
+
         <TextView
             style="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:layout_width="wrap_content"
@@ -56,6 +75,13 @@
                 android:layout_height="wrap_content"
                 android:checkable="true"
                 android:text="Last 3 months" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/filter_date_last_1_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="Last 1 year" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/filter_date_custom_date"

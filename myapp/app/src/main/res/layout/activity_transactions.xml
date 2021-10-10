@@ -124,7 +124,6 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-
     <TextView
         android:id="@+id/transaction_page_sms_list_text"
         style="@style/TextAppearance.MaterialComponents.Caption"
@@ -141,7 +140,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialCardView"
         app:layout_constraintVertical_weight="1" />
-
 
     <LinearLayout
         android:id="@+id/sms_msg_list_linear"
@@ -165,6 +163,16 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/transaction_page_no_transaction_found_text"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Transactions Found"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/transaction_page_add_cash_transaction"
@@ -184,6 +192,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

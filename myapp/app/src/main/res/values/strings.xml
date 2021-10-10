@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">myapp</string>
+    <string name="app_name">F Super</string>
+
+    <string name="supported_bank_hyperlink">No Bank Accounts Found \n\n<a href="https://github.com/sharadregoti/Net-Worth-Calculator/wiki/Supported-Indian-Banks">Checkout Supported Banks</a></string>
+    <!--    <string name="app_name">F Super</string>-->
     <string name="read_sms">Read SMS</string>
     <string name="textview">TextView</string>
     <!-- TODO: Remove or change this placeholder text -->

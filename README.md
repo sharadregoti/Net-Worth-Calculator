@@ -14,6 +14,10 @@ Bank accounts             |  Bank transaction summary  | Filters on transaction
 :-------------------------:|:-------------------------:|:-------------------------:
 ![1](assets/bank_accounts.jpg)  |  ![2](assets/bank_transaction_with_summary.jpg) | ![2](assets/bank_transaction_filter.jpg)
 
+Home Page             |  Mutual Funds  | Stocks
+:-------------------------:|:-------------------------:|:-------------------------:
+![1](assets/home_page.jpeg)  |  ![2](assets/mutual_fund.jpeg) | ![2](assets/stocks.jpeg)
+
 ### Stocks Tracker
 Connects with your favourite stock broker to fetch your asset class info & show in a consolidate view
 ### Mutual Fund Tracker

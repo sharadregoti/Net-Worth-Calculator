@@ -3,6 +3,7 @@ package com.sharad.myapp.Activities;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
 import com.sharad.myapp.Adapters.TransactionsRecycleAdapter;
 import com.sharad.myapp.Fragments.TransactionFilterBottomSheetFragment;
 import com.sharad.myapp.R;
@@ -27,12 +35,6 @@ import com.sharad.myapp.Utils.Constants;
 import com.sharad.myapp.Utils.DatabaseHelper;
 import com.sharad.myapp.Utils.Functions;
 import com.sharad.myapp.Utils.ProcessSMS;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -71,6 +73,20 @@ public class ActivityTransactions extends AppCompatActivity implements Transacti
                 new String[]{Manifest.permission.READ_SMS},
                 PackageManager.PERMISSION_GRANTED
         );
+
+        SharedPreferences c = getSharedPreferences("transactionDialogText", MODE_PRIVATE);
+        if (!c.getBoolean("is_dialog_shown", false)) {
+            MaterialAlertDialogBuilder madb = new MaterialAlertDialogBuilder(this);
+            madb.setTitle("Note");
+            madb.setMessage("We consider your ATM withdrawals as in hand cash and not as an expense");
+            madb.setPositiveButton(R.string.transaction_note_atm, (dialogInterface, i) -> {
+                SharedPreferences sharedPreferences = getSharedPreferences("transactionDialogText", MODE_PRIVATE);
+                SharedPreferences.Editor myEdit = sharedPreferences.edit();
+                myEdit.putBoolean("is_dialog_shown", true);
+                myEdit.apply();
+            });
+            madb.show();
+        }
 
         RecyclerView transactionRecyclerView;
         ExtendedFloatingActionButton addCashTxnBtn = findViewById(R.id.transaction_page_add_cash_transaction);
@@ -139,16 +155,23 @@ public class ActivityTransactions extends AppCompatActivity implements Transacti
                         String category = data.getStringExtra("category");
                         String expense_merch = data.getStringExtra("expense_merch");
                         String note = data.getStringExtra("note");
+                        String photoURI = data.getStringExtra("photo");
+                        String is_mismatch_manual_msg = data.getStringExtra("is_mismatch_manual_msg");
 
-                        long insertId = dh.addTransactionSMS(amount, date, 0, "", transaction_type, Constants.PAYMENT_TYPE_CASH, expense_merch, "Offline", "", note, "", category);
+                        Float inHandAmt = dh.getInHandCashAmount();
+                        if (amount > inHandAmt && transaction_type.equals(Constants.TXN_TYPE_DEBITED)) {
+                            if (is_mismatch_manual_msg.isEmpty()) {
+                                is_mismatch_manual_msg = Constants.NOT_AVAILABLE;
+                            }
+                            long insertId = dh.addTransactionSMS(amount - inHandAmt, date - 10, 0, "", Constants.TXN_TYPE_CREDITED, Constants.PAYMENT_TYPE_CASH, is_mismatch_manual_msg, "Offline", "", "", "", Constants.TXN_CATEGORY_DEFAULT_Other);
+                            dh.insertInHandCashAmount(insertId, (amount - inHandAmt), Constants.IN_HAND_CASH_AUTOMATICALLY_AMOUNT_ADJUSTED);
+                            // in hand adjustment made, in hand equals current amount
+                            inHandAmt = inHandAmt + (amount-inHandAmt);
+                        }
+
+                        long insertId = dh.addTransactionSMS(amount, date, 0, "", transaction_type, Constants.PAYMENT_TYPE_CASH, expense_merch, "Offline", "", note, photoURI, category);
                         if (insertId != -1) {
                             Log.d("Add cash txn: ", "Added data successfully");
-                            Float inHandAmt = dh.getInHandCashAmount();
-                            // TODO: What if the amount is more that actual in hand cash
-                            if (inHandAmt < amount) {
-                                dh.insertInHandCashAmount(insertId, (amount - inHandAmt), Constants.IN_HAND_CASH_AUTOMATICALLY_AMOUNT_ADJUSTED);
-                                inHandAmt = inHandAmt + (amount - inHandAmt);
-                            }
 
                             if (transaction_type.equals(Constants.TXN_TYPE_DEBITED)) {
                                 dh.insertInHandCashAmount(insertId, inHandAmt - amount, Constants.IN_HAND_CASH_AUTOMATICALLY_DEBITED);
@@ -160,7 +183,6 @@ public class ActivityTransactions extends AppCompatActivity implements Transacti
                             Log.d("Add cash txn: ", "Failed to add data");
                         }
 
-                        // TODO: extract current filter
                         onSaveButtonClicked(currentDateFilter, currentCustomDateText, currentStartDate, currentEndDate, currentBankFilter, currentPaymentTypeFilter, currentTxnTypeFilter);
                     }
                 });
@@ -168,6 +190,7 @@ public class ActivityTransactions extends AppCompatActivity implements Transacti
         // Show add cash txn page, when FAB is clicked
         addCashTxnBtn.setOnClickListener(view -> {
             Intent intent = new Intent(ActivityTransactions.this, ActivityAddCashTransaction.class);
+            intent.putExtra("in_hand_cash", processedTxns.getInHandCash());
             handleAddCashActivityResult.launch(intent);
         });
 
@@ -313,8 +336,8 @@ public class ActivityTransactions extends AppCompatActivity implements Transacti
     private void changeTransactionSummaryText() {
         TextView tNoTxnFound;
         tNoTxnFound = findViewById(R.id.transaction_page_no_transaction_found_text);
+        // tNoTxnFound.setVisibility(View.VISIBLE);
         if (processedTxns.getTransactionCount() == 0) {
-            tNoTxnFound.setVisibility(View.VISIBLE);
             Snackbar sb = Snackbar.make(tNoTxnFound, "No Transaction Found", Snackbar.LENGTH_SHORT);
             sb.setAction("Close", new View.OnClickListener() {
                 @Override
@@ -325,7 +348,7 @@ public class ActivityTransactions extends AppCompatActivity implements Transacti
             });
             sb.show();
         } else {
-            tNoTxnFound.setVisibility(View.INVISIBLE);
+            // tNoTxnFound.setVisibility(View.INVISIBLE);
         }
         TextView inHandCashView = findViewById(R.id.transaction_activity_set_in_hand_cash_amount_text);
         inHandCashView.setText(String.format("+ ₹%s", Functions.format((long) processedTxns.getInHandCash())));

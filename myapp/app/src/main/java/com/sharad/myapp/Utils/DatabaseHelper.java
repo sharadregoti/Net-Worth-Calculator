@@ -23,6 +23,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SQL_FILE_NAME = "green_money";
 
     // Table
+    private static final String STOCKS_ACCOUNTS_TABLE = "stocks";
+    private static final String STOCKS_ACCOUNTS_C_ID_0 = "id";
+    private static final String STOCKS_ACCOUNTS_C_CURRENT_VALUE_1 = "current_value";
+    private static final String STOCKS_ACCOUNTS_C_INVESTED_AMOUNT_2 = "invested_amount";
+    private static final String STOCKS_ACCOUNTS_C_WALLET_BALANCE_3 = "wallet_balance";
+
+    // Table
+    private static final String MUTUAL_FUNDS_ACCOUNTS_TABLE = "mutual_funds";
+    private static final String MUTUAL_FUNDS_ACCOUNTS_C_ID_0 = "id";
+    private static final String MUTUAL_FUNDS_ACCOUNTS_C_CURRENT_VALUE_1 = "current_value";
+    private static final String MUTUAL_FUNDS_ACCOUNTS_C_INVESTED_AMOUNT_2 = "invested_amount";
+
+    // Table
     private static final String BANK_ACCOUNTS_TABLE = "bank_accounts";
     private static final String BANK_ACCOUNTS_C_ID_0 = "id";
     private static final String BANK_ACCOUNTS_C_BANK_NAME_1 = "bank_name";
@@ -140,9 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         public String getPhoto(int position) {
-            // TODO: Implementation remaining
-            return "";
-            // return (String) txnList.get(position).get(TRANS);
+            return (String) txnList.get(position).get(TRANSACTION_SMS_TABLE_C_IMAGE_REF_10);
         }
 
         public int getRowId(int position) {
@@ -232,6 +243,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 BANK_ACCOUNTS_C_BANK_BALANCE_2 + " REAL, " +
                 BANK_ACCOUNTS_C_BANK_ACCOUNT_NUMBER_3 + " TEXT )";
         db.execSQL(query.toString());
+
+        query = "CREATE TABLE IF NOT EXISTS " + STOCKS_ACCOUNTS_TABLE + " ( " +
+                STOCKS_ACCOUNTS_C_ID_0 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                STOCKS_ACCOUNTS_C_CURRENT_VALUE_1 + " REAL, " +
+                STOCKS_ACCOUNTS_C_INVESTED_AMOUNT_2 + " REAL, " +
+                STOCKS_ACCOUNTS_C_WALLET_BALANCE_3 + " REAL )";
+        db.execSQL(query.toString());
+
+        query = "CREATE TABLE IF NOT EXISTS " + MUTUAL_FUNDS_ACCOUNTS_TABLE + " ( " +
+                MUTUAL_FUNDS_ACCOUNTS_C_ID_0 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                MUTUAL_FUNDS_ACCOUNTS_C_CURRENT_VALUE_1 + " REAL, " +
+                MUTUAL_FUNDS_ACCOUNTS_C_INVESTED_AMOUNT_2 + " REAL )";
+        db.execSQL(query.toString());
     }
 
     @Override
@@ -294,10 +318,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return arr;
     }
 
-    public int updateProcessedTxnSMS(int id, float amount, Long date, String tt, String expenseMerch, String notes, String category) {
+    public int updateProcessedTxnSMS(int id, float amount, Long date, String tt, String expenseMerch, String notes, String category, String photo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(TRANSACTION_SMS_TABLE_C_AMOUNT_3, amount);
+        cv.put(TRANSACTION_SMS_TABLE_C_IMAGE_REF_10, photo);
         cv.put(TRANSACTION_SMS_TABLE_C_DATE_4, date);
         cv.put(TRANSACTION_SMS_TABLE_C_TRANSACTION_TYPE_6, tt);
         cv.put(TRANSACTION_SMS_TABLE_C_TRANSACTION_PERSON_5, expenseMerch);
@@ -467,6 +492,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         data.close();
 
         return new StoreProcessedTransactionResult(this.calculateIncome(whereClause), this.calculateExpense(whereClause), Float.valueOf(this.getInHandCashAmount()), list);
+    }
+
+    // Table
+    public float getCurrentStockValue() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = SQLiteQueryBuilder.buildQueryString(false, STOCKS_ACCOUNTS_TABLE, new String[]{STOCKS_ACCOUNTS_C_CURRENT_VALUE_1}, "", "", "", "", "1");
+        Cursor data = db.rawQuery(query, null);
+        // TODO: Some exception handling
+        if (data.moveToNext()) {
+            return data.getFloat(0);
+        }
+        data.close();
+        return 0;
+    }
+
+    public void upsertCurrentStockValue(float currentValue, float investedAmount, float walletBalance) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        long unixTime = System.currentTimeMillis();
+        cv.put(STOCKS_ACCOUNTS_C_CURRENT_VALUE_1, currentValue);
+        cv.put(STOCKS_ACCOUNTS_C_INVESTED_AMOUNT_2, investedAmount);
+        cv.put(STOCKS_ACCOUNTS_C_WALLET_BALANCE_3, walletBalance);
+        cv.put(STOCKS_ACCOUNTS_C_ID_0, 1);
+        db.insertWithOnConflict(STOCKS_ACCOUNTS_TABLE, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    // Table
+    public float getCurrentMutualFundValue() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = SQLiteQueryBuilder.buildQueryString(false, MUTUAL_FUNDS_ACCOUNTS_TABLE, new String[]{MUTUAL_FUNDS_ACCOUNTS_C_CURRENT_VALUE_1}, "", "", "", "", "1");
+        Cursor data = db.rawQuery(query, null);
+        // TODO: Some exception handling
+        if (data.moveToNext()) {
+            return data.getFloat(0);
+        }
+        data.close();
+        return 0;
+    }
+
+    public void upsertCurrentMutualFundValue(float currentValue, float investedAmount) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        long unixTime = System.currentTimeMillis();
+        cv.put(MUTUAL_FUNDS_ACCOUNTS_C_CURRENT_VALUE_1, currentValue);
+        cv.put(MUTUAL_FUNDS_ACCOUNTS_C_INVESTED_AMOUNT_2, investedAmount);
+        cv.put(MUTUAL_FUNDS_ACCOUNTS_C_ID_0, 1);
+        db.insertWithOnConflict(MUTUAL_FUNDS_ACCOUNTS_TABLE, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     // Table

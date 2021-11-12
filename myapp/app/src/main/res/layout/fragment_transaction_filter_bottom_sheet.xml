@@ -17,9 +17,6 @@
         android:paddingRight="16dp"
         android:paddingBottom="8dp">
 
-        <!--        <TextView-->
-        <!--            android:layout_width=""-->
-        <!--            android:layout_height=""-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/filter_button_close"
             style="?attr/materialButtonOutlinedStyle"

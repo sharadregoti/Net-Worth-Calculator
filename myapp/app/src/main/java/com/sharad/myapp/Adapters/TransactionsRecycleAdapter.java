@@ -11,13 +11,13 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.sharad.myapp.Activities.ActivityDetailedTransactionItem;
 import com.sharad.myapp.R;
 import com.sharad.myapp.Utils.Constants;
 import com.sharad.myapp.Utils.DatabaseHelper;
 import com.sharad.myapp.Utils.Functions;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 
 public class TransactionsRecycleAdapter extends RecyclerView.Adapter<TransactionsRecycleAdapter.RecycleViewHolder> {
 

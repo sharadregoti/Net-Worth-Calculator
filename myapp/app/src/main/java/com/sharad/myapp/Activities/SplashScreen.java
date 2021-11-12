@@ -35,21 +35,21 @@ public class SplashScreen extends AppCompatActivity {
 
         final Handler handler = new Handler();
         handler.postDelayed(() -> {
-            if (currentUser == null) {
-                Intent intent = new Intent(this, ActivitySignIn.class);
-                startActivity(intent);
-                finish();
-            } else if (!isOnBoardingFinished()) {
-                Intent intent = new Intent(this, ActivityOnBoarding.class);
-                startActivity(intent);
-                finish();
-            } else {
+            // if (currentUser == null) {
+            //     Intent intent = new Intent(this, ActivitySignIn.class);
+            //     startActivity(intent);
+            //     finish();
+            // } else if (!isOnBoardingFinished()) {
+            //     Intent intent = new Intent(this, ActivityOnBoarding.class);
+            //     startActivity(intent);
+            //     finish();
+            // } else {
                 Intent intent = new Intent(this, ActivityHome.class);
                 startActivity(intent);
                 finish();
-            }
+            // }
 
-        }, 3000);
+        }, 1);
     }
 
     private boolean isOnBoardingFinished() {

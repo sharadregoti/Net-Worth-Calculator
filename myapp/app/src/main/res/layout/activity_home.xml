@@ -12,13 +12,12 @@
         android:id="@+id/materialCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_margin="16dp"
         app:cardElevation="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/transaction_page_sms_list_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top_action_bar">
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -26,25 +25,174 @@
             android:padding="8dp">
 
             <TextView
-                android:id="@+id/home_activity_networth_text"
-                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:id="@+id/home_activity_net_worth_text"
+                style="@style/TextAppearance.MaterialComponents.Headline5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="My Net Worth"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/home_activity_net_worth_amount"
+                android:id="@+id/home_activity_net_worth_amount_text"
+                style="@style/TextAppearance.MaterialComponents.Headline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹1.2Cr"
+                app:layout_constraintEnd_toEndOf="@id/home_activity_net_worth_text"
+                app:layout_constraintStart_toStartOf="@id/home_activity_net_worth_text"
+                app:layout_constraintTop_toBottomOf="@id/home_activity_net_worth_text" />
+
+            <TextView
+                android:id="@+id/home_activity_similar_icon_text"
+                style="@style/TextAppearance.MaterialComponents.Headline5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="~"
+                app:layout_constraintBottom_toBottomOf="@id/home_activity_net_worth_amount_text"
+                app:layout_constraintStart_toEndOf="@id/home_activity_net_worth_amount_text"
+                app:layout_constraintTop_toTopOf="@id/home_activity_net_worth_amount_text"
+                app:layout_constraintVertical_bias="0.8" />
+
+            <TextView
+                android:id="@+id/home_activity_net_worth_inflation_adjusted_text"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Inflation adjusted"
+                app:layout_constraintStart_toStartOf="@id/home_activity_net_worth_inflation_adjusted_amount_text"
+                app:layout_constraintBottom_toTopOf="@id/home_activity_net_worth_inflation_adjusted_amount_text"
+
+                 />
+
+            <TextView
+                android:id="@+id/home_activity_net_worth_inflation_adjusted_amount_text"
+                style="@style/TextAppearance.MaterialComponents.Headline5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="₹95L"
+                app:layout_constraintBottom_toBottomOf="@id/home_activity_similar_icon_text"
+                app:layout_constraintStart_toEndOf="@id/home_activity_similar_icon_text"
+                app:layout_constraintTop_toTopOf="@id/home_activity_similar_icon_text" />
+
+            <TextView
+                android:id="@+id/home_activity_asset_value_text"
                 style="@style/TextAppearance.MaterialComponents.Subtitle1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="₹ 3Cr"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp"
+                android:text="Assets"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/home_activity_networth_text" />
+                app:layout_constraintTop_toBottomOf="@id/home_activity_net_worth_amount_text" />
+
+            <TextView
+                android:id="@+id/home_activity_asset_amount_text"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹0"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintEnd_toStartOf="@id/home_activity_debt_amount_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/home_activity_asset_value_text" />
+
+            <TextView
+                android:id="@+id/home_activity_debt_value_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Debt"
+                app:layout_constraintBottom_toBottomOf="@id/home_activity_asset_value_text"
+                app:layout_constraintEnd_toStartOf="@id/home_activity_inflation_value_text"
+                app:layout_constraintStart_toEndOf="@id/home_activity_asset_value_text" />
+
+            <TextView
+                android:id="@+id/home_activity_debt_amount_text"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹0"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintEnd_toStartOf="@id/home_activity_inflation_amount_text"
+                app:layout_constraintStart_toStartOf="@id/home_activity_debt_value_text"
+                app:layout_constraintTop_toBottomOf="@id/home_activity_debt_value_text" />
+
+            <TextView
+                android:id="@+id/home_activity_inflation_value_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Inflation"
+                app:layout_constraintBottom_toBottomOf="@id/home_activity_debt_value_text"
+                app:layout_constraintEnd_toStartOf="@id/home_activity_time_period_value_text"
+                app:layout_constraintStart_toEndOf="@id/home_activity_debt_value_text" />
+
+            <TextView
+                android:id="@+id/home_activity_inflation_amount_text"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4%"
+                app:layout_constraintEnd_toEndOf="@id/home_activity_inflation_value_text"
+                app:layout_constraintStart_toStartOf="@id/home_activity_inflation_value_text"
+                app:layout_constraintTop_toBottomOf="@id/home_activity_inflation_value_text" />
+
+            <TextView
+                android:id="@+id/home_activity_time_period_value_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time"
+                app:layout_constraintBottom_toBottomOf="@id/home_activity_inflation_value_text"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/home_activity_time_period_amount_text"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5 Yr"
+                app:layout_constraintEnd_toEndOf="@id/home_activity_time_period_value_text"
+                app:layout_constraintStart_toStartOf="@id/home_activity_time_period_value_text"
+                app:layout_constraintTop_toBottomOf="@id/home_activity_time_period_value_text" />
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/home_activity_inflation_value_text"-->
+            <!--                style="@style/TextAppearance.MaterialComponents.Subtitle1"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="Inflation"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/home_activity_asset_amount_text" />-->
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/home_activity_infaltion_amount_text"-->
+            <!--                style="@style/TextAppearance.MaterialComponents.Headline6"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="4%"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/home_activity_inflation_value_text" />-->
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/home_activity_time_period_value_text"-->
+            <!--                style="@style/TextAppearance.MaterialComponents.Subtitle1"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="Time period"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/home_activity_debt_amount_text" />-->
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/home_activity_time_period_amount_text"-->
+            <!--                style="@style/TextAppearance.MaterialComponents.Headline6"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="10 yr"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/home_activity_time_period_value_text" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -179,7 +327,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Crypto" />
+                        android:text="Crypto / NFTs" />
 
                 </LinearLayout>
 

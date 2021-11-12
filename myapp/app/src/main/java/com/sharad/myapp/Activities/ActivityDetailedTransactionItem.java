@@ -2,6 +2,7 @@ package com.sharad.myapp.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -13,17 +14,18 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
-import com.sharad.myapp.R;
-import com.sharad.myapp.Utils.Constants;
-import com.sharad.myapp.Utils.DatabaseHelper;
-import com.sharad.myapp.Utils.Functions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
+import com.sharad.myapp.R;
+import com.sharad.myapp.Utils.Constants;
+import com.sharad.myapp.Utils.DatabaseHelper;
+import com.sharad.myapp.Utils.Functions;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -74,16 +76,16 @@ public class ActivityDetailedTransactionItem extends AppCompatActivity {
         TextView tSmsBody = findViewById(R.id.detailed_transaction_activity_sms_body);
         TextView tNotes = findViewById(R.id.detailed_transaction_activity_notes);
         TextView tSmsBankName = findViewById(R.id.detailed_transaction_activity_sms_bank_name);
+        ImageView iTxnPhoto = findViewById(R.id.detailed_transaction_activity_image);
         ImageView iBank = findViewById(R.id.detailed_transaction_activity_bank_image);
         ChipGroup cgTags = findViewById(R.id.reusable_card_view_tags_chip_group);
 
         MaterialCardView mcvSms = findViewById(R.id.detailed_transaction_activity_sms_material_card_view);
-        MaterialCardView mcvNotes = findViewById(R.id.detailed_transaction_activity_notes_material_card_view);
 
         MaterialButton deleteButton = findViewById(R.id.detailed_transaction_activity_delete_button);
         MaterialButton editButton = findViewById(R.id.detailed_transaction_activity_edit_button);
 
-        if (!bank.equals("")){
+        if (!bank.equals("")) {
             if (supportedBanks.get(bank) == null) {
                 iBank.setImageResource(supportedBanks.get(Constants.BANK_UNKNOWN));
             } else {
@@ -110,8 +112,9 @@ public class ActivityDetailedTransactionItem extends AppCompatActivity {
                         String category1 = data.getStringExtra("category");
                         String expense_merch = data.getStringExtra("expense_merch");
                         String note = data.getStringExtra("note");
+                        String intentPhoto = data.getStringExtra("photo");
 
-                        if (dh.updateProcessedTxnSMS(transactionSMSId, amount1, date1, transaction_type, expense_merch, note, category1) != -1) {
+                        if (dh.updateProcessedTxnSMS(transactionSMSId, amount1, date1, transaction_type, expense_merch, note, category1, intentPhoto) != -1) {
                             Log.i("Txn update", "success");
                         } else {
                             Log.i("Txn update", "fail");
@@ -138,6 +141,11 @@ public class ActivityDetailedTransactionItem extends AppCompatActivity {
                         tDate.setText(sDate.format(date1));
                         tExpMerch.setText(expense_merch);
                         tNotes.setText(note);
+                        if (intentPhoto.isEmpty()) {
+                            iTxnPhoto.setVisibility(View.GONE);
+                        } else {
+                            iTxnPhoto.setImageURI(Uri.parse(intentPhoto));
+                        }
 
                         Snackbar sb = Snackbar.make(editButton, "Item Updated Successfully", Snackbar.LENGTH_SHORT);
                         sb.show();
@@ -146,22 +154,19 @@ public class ActivityDetailedTransactionItem extends AppCompatActivity {
                     }
                 });
 
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ActivityDetailedTransactionItem.this, ActivityAddCashTransaction.class);
-                intent.putExtra("activity_title", "Edit transaction");
-                // 3 is index required to remove +/- space ruppe symbol from text
-                intent.putExtra("amount", amount.substring(3).replace(",", ""));
-                intent.putExtra("non_formatted_amount", nonFormattedAmount);
-                intent.putExtra("date", date);
-                intent.putExtra("transaction_type", Functions.toTitleCase(transactionType));
-                intent.putExtra("category", category);
-                intent.putExtra("expense_merchant", expenseMerchant);
-                intent.putExtra("notes", notes);
-                intent.putExtra("photo", photo);
-                handleUpdateTxnActivityResult.launch(intent);
-            }
+        editButton.setOnClickListener(view -> {
+            Intent intent = new Intent(ActivityDetailedTransactionItem.this, ActivityAddCashTransaction.class);
+            intent.putExtra("activity_title", "Edit transaction");
+            // 3 is index required to remove +/- space ruppe symbol from text
+            intent.putExtra("amount", amount.substring(3).replace(",", ""));
+            intent.putExtra("non_formatted_amount", nonFormattedAmount);
+            intent.putExtra("date", date);
+            intent.putExtra("transaction_type", Functions.toTitleCase(transactionType));
+            intent.putExtra("category", category);
+            intent.putExtra("expense_merchant", expenseMerchant);
+            intent.putExtra("notes", notes);
+            intent.putExtra("photo", photo);
+            handleUpdateTxnActivityResult.launch(intent);
         });
 
         // Set values on the views of activity
@@ -176,16 +181,26 @@ public class ActivityDetailedTransactionItem extends AppCompatActivity {
         }
         tSmsBody.setText(smsMessage);
         tNotes.setText(notes);
+        if (!photo.isEmpty()) {
+            iTxnPhoto.setVisibility(View.VISIBLE);
+            iTxnPhoto.setImageURI(Uri.parse(photo));
+        }
+
+        iTxnPhoto.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(photo))));
 
         // Remove old tags in chip group (happens when filter is rendered)
         cgTags.removeAllViews();
         String[] arr = new String[]{};
         arr = tags.split(" ", -1);
-        for (int i = 0; i < arr.length; i++) {
+        for (String s : arr) {
             Chip chip = new Chip(this);
-            chip.setText(arr[i]);
+            chip.setText(s);
             cgTags.addView(chip);
         }
+        Chip showChipInCategory = new Chip(this);
+        showChipInCategory.setText(category);
+        showChipInCategory.setChipIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.detailed_transaction_category_chip_icon, null));
+        cgTags.addView(showChipInCategory);
     }
 
     @Override
@@ -198,11 +213,10 @@ public class ActivityDetailedTransactionItem extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                this.finish();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            this.finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

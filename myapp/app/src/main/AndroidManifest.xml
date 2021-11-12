@@ -3,6 +3,7 @@
     package="com.sharad.myapp">
 
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,11 +12,11 @@
         android:roundIcon="@mipmap/app_icon_2_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.sharad.myapp.Activities.ActivityOnBoarding"></activity>
-        <activity android:name="com.sharad.myapp.Activities.ActivitySignIn" />
-        <activity android:name="com.sharad.myapp.Activities.ActivityTransactionProgressBar" />
+        <activity android:name=".Activities.ActivityOnBoarding" />
+        <activity android:name=".Activities.ActivitySignIn" />
+        <activity android:name=".Activities.ActivityTransactionProgressBar" />
         <activity
-            android:name="com.sharad.myapp.Activities.SplashScreen"
+            android:name=".Activities.SplashScreen"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,28 +24,39 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.sharad.myapp.Activities.ActivityBanksRefreshBalance" />
-        <activity android:name="com.sharad.myapp.Activities.ActivityCrypto" />
-        <activity android:name="com.sharad.myapp.Activities.ActivityBanks" />
+        <activity android:name=".Activities.ActivityBanksRefreshBalance" />
+        <activity android:name=".Activities.ActivityCrypto" />
+        <activity android:name=".Activities.ActivityBanks" />
         <activity
-            android:name="com.sharad.myapp.Activities.ActivityStocks"
+            android:name=".Activities.ActivityStocks"
             android:label="@string/title_activity_stocks"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.sharad.myapp.Activities.ActivityMutualFund" />
-        <activity android:name="com.sharad.myapp.Activities.ActivityUpdateInHandCash" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="sharad.f-super.com"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Activities.ActivityMutualFund" />
+        <activity android:name=".Activities.ActivityUpdateInHandCash" />
         <activity
-            android:name="com.sharad.myapp.Activities.ActivitySettings"
+            android:name=".Activities.ActivitySettings"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.sharad.myapp.Activities.ActivityPrivacy"
+            android:name=".Activities.ActivityPrivacy"
             android:label="@string/title_activity_privacy"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.sharad.myapp.Activities.ActivityAddCashTransaction" />
-        <activity android:name="com.sharad.myapp.Activities.ActivityDetailedTransactionItem" />
-        <activity android:name="com.sharad.myapp.Activities.ActivityTransactions" />
+        <activity android:name=".Activities.ActivityAddCashTransaction" />
+        <activity android:name=".Activities.ActivityDetailedTransactionItem" />
+        <activity android:name=".Activities.ActivityTransactions" />
         <activity
-            android:name="com.sharad.myapp.Activities.ActivityHome"
+            android:name=".Activities.ActivityHome"
             android:exported="true">
 
             <!-- <intent-filter> -->

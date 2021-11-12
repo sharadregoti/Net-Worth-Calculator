@@ -27,12 +27,23 @@ public class ActivityHome extends AppCompatActivity {
         LinearLayout llBanks = findViewById(R.id.home_activity_banks_layout);
         LinearLayout llCrypto = findViewById(R.id.home_activity_crypto_layout);
         LinearLayout llStocks = findViewById(R.id.home_activity_stocks_layout);
-        TextView tNetWorthAmount = findViewById(R.id.home_activity_net_worth_amount);
+        TextView tNetWorthAmount = findViewById(R.id.home_activity_net_worth_amount_text);
+        TextView tInflationNetWorthAmount = findViewById(R.id.home_activity_net_worth_inflation_adjusted_amount_text);
+        TextView tAssetAmount = findViewById(R.id.home_activity_asset_amount_text);
 
         DatabaseHelper dh = new DatabaseHelper(this);
 
-        tNetWorthAmount.setText(Functions.format((long) dh.getNetWorth()));
+        int totalAmount = (int) dh.getNetWorth() + (int) dh.getCurrentStockValue() + (int) dh.getCurrentMutualFundValue();
+        double compoundedValue = totalAmount - calculateCompoundInterest(totalAmount, 5, .04);
 
+        tNetWorthAmount.setText("₹"+Functions.format(totalAmount));
+        tAssetAmount.setText("₹"+Functions.format(totalAmount));
+        tInflationNetWorthAmount.setText("₹"+Functions.format((long) compoundedValue));
+
+        // HashMap<String,String> myMap = Functions.getCoFormat((long) totalCurrentAmount);
+
+        // double inflationAdjustedAmount = Float.parseFloat(myMap.get("value").toString()) * Math.pow((1 + 15.0), 10.0);
+        // tInfalationAdjustedAmount.setText("₹" + inflationAdjustedAmount + myMap.get("suffix"));
         llMutualFund.setOnClickListener(view -> {
             Intent intent = new Intent(ActivityHome.this, ActivityMutualFund.class);
             startActivity(intent);
@@ -76,5 +87,9 @@ public class ActivityHome extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    public double calculateCompoundInterest(int p, int t, double r) {
+        return p * Math.pow(1 + (r), t) - p;
     }
 }

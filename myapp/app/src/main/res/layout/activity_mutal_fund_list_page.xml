@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/row_item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground"
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+
+        app:cardElevation="5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:padding="8dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/activity_mutual_fund_item_page_fund_name"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HDFC Index Fund Sensex"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/activity_mutual_fund_item_page_current_value_text"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Current value"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/activity_mutual_fund_item_page_fund_name" />
+
+            <TextView
+                android:id="@+id/activity_mutual_fund_item_page_current_value_amount_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹91.11K"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/activity_mutual_fund_item_page_current_value_text" />
+
+            <ImageView
+                android:id="@+id/activity_mutual_item_page_arrow_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/arrow_up"
+                app:layout_constraintBottom_toBottomOf="@id/activity_mutual_fund_item_page_current_value_amount_text"
+                app:layout_constraintStart_toEndOf="@id/activity_mutual_fund_item_page_current_value_amount_text"
+                app:layout_constraintTop_toTopOf="@id/activity_mutual_fund_item_page_current_value_amount_text" />
+
+
+            <TextView
+                android:id="@+id/activity_mutual_fund_item_page_current_value_growth_amount_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:textColor="@color/green_money"
+                android:layout_height="wrap_content"
+                android:text="21.49% (16.12K)"
+                app:layout_constraintBottom_toBottomOf="@id/activity_mutual_item_page_arrow_image"
+                app:layout_constraintStart_toEndOf="@id/activity_mutual_item_page_arrow_image"
+                app:layout_constraintTop_toTopOf="@id/activity_mutual_item_page_arrow_image"/>
+
+
+            <TextView
+                android:id="@+id/activity_mutual_fund_item_page_invested_value_text"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Invested amount"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/activity_mutual_fund_item_page_fund_name" />
+
+            <TextView
+                android:id="@+id/activity_mutual_fund_item_page_invested_value_amount_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹75K"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/activity_mutual_fund_item_page_invested_value_text" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--        <include layout="@layout/reusable_card_view" />-->
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

@@ -6,13 +6,165 @@
     android:layout_height="match_parent"
     tools:context=".Activities.ActivityMutualFund">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <include
+        layout="@layout/top_action_bar"
+        app:menu="@menu/app_bar" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/activity_mutual_fund_summary"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Coming Soon"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardElevation="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/activity_mutual_fund_my_funds_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_action_bar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/transaction_activity_summary_text"
+                style="@style/TextAppearance.MaterialComponents.Headline5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mutual funds"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/activity_mutual_fund_current_value_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:paddingEnd="32dp"
+                android:text="Current value (NAV as on 14 Oct 2021)"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/transaction_activity_summary_text" />
+
+            <TextView
+                android:id="@+id/activity_mutual_fund_current_amount_text"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/activity_mutual_fund_current_value_text" />
+
+            <ImageView
+                android:id="@+id/activity_mutual_fund_arrow_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/arrow_up"
+                app:layout_constraintBottom_toBottomOf="@id/activity_mutual_fund_current_amount_text"
+                app:layout_constraintStart_toEndOf="@id/activity_mutual_fund_current_amount_text"
+                app:layout_constraintTop_toTopOf="@id/activity_mutual_fund_current_amount_text" />
+
+            <TextView
+                android:id="@+id/activity_mutual_fund_growth_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0% (₹0)"
+                android:textColor="@color/green_money"
+                app:layout_constraintBottom_toBottomOf="@id/activity_mutual_fund_current_amount_text"
+                app:layout_constraintStart_toEndOf="@id/activity_mutual_fund_arrow_image"
+                app:layout_constraintTop_toTopOf="@id/activity_mutual_fund_current_amount_text" />
+
+            <TextView
+                android:id="@+id/activity_mutual_fund_invested_amount_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:paddingEnd="32dp"
+                android:text="Invested amount"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/activity_mutual_fund_current_amount_text" />
+
+            <TextView
+                android:id="@+id/activity_mutual_fund_invested_amount_value_text"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/activity_mutual_fund_invested_amount_text" />
+
+            <TextView
+                android:id="@+id/activity_mutual_fund_invested_since_text"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Expense paid"
+                app:layout_constraintStart_toEndOf="@id/activity_mutual_fund_invested_amount_text"
+                app:layout_constraintTop_toBottomOf="@id/activity_mutual_fund_current_amount_text" />
+
+            <TextView
+                android:id="@+id/activity_mutual_fund_invested_since_date_text"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹0"
+                app:layout_constraintStart_toStartOf="@id/activity_mutual_fund_invested_since_text"
+                app:layout_constraintTop_toBottomOf="@id/activity_mutual_fund_invested_since_text" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/activity_mutual_fund_no_mutual_funds_found_text"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="No Mutual Funds Found"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/activity_mutual_fund_my_funds_text"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="My Funds"
+        app:layout_constraintBottom_toTopOf="@+id/activity_mutual_fund_list_linear"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_mutual_fund_summary"
+        app:layout_constraintVertical_weight="1" />
+
+
+    <LinearLayout
+        android:id="@+id/activity_mutual_fund_list_linear"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_mutual_fund_my_funds_text">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mutual_fund_activity_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

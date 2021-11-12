@@ -26,4 +26,12 @@
 
     <string name="bank_delete_account_yes">Yes</string>
     <string name="bank_delete_account_no">No</string>
+
+    <string name="transaction_note_atm">Got It</string>
+    <string name="automatically">Automatic</string>
+    <string name="manually">Manual</string>
+    <string name="title_activity_transaction_mismatch_resolver">
+        ActivityTransactionMismatchResolver
+    </string>
+
 </resources>

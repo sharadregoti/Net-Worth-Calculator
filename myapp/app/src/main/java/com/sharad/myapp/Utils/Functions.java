@@ -30,17 +30,6 @@ public class Functions extends AppCompatActivity {
         // suffixes.put(1_000_000_000_000_000_000L, "E");
     }
 
-    public static float deFormat(String v) {
-        if (v.length() > 0) {
-            Character lastElement = v.charAt(v.length() - 1);
-            if (lastElement == 'K') {
-                float remainElem = Float.valueOf(v.substring(0, v.length() - 2));
-                return remainElem * 10000;
-            }
-        }
-        return Float.valueOf(v);
-    }
-
     public static String format(long value) {
         //Long.MIN_VALUE == -Long.MIN_VALUE so we need an adjustment here
         if (value == Long.MIN_VALUE) return format(Long.MIN_VALUE + 1);
@@ -51,9 +40,34 @@ public class Functions extends AppCompatActivity {
         Long divideBy = e.getKey();
         String suffix = e.getValue();
 
-        long truncated = value / (divideBy / 10); //the number part of the output times 10
-        boolean hasDecimal = truncated < 100 && (truncated / 10d) != (truncated / 10);
-        return hasDecimal ? (truncated / 10d) + suffix : (truncated / 10) + suffix;
+        float truncated = (float) value / (divideBy); //the number part of the output times 10
+        String temp = String.format("%.2f", truncated);
+        int tempLen = temp.length();
+        if (temp.endsWith(".00")) {
+            // remove last 3 characters include dot & 2 00s
+            temp = temp.replace(".00", "");
+        } else if (temp.endsWith("0")) {
+            // remove last 1 character
+            temp = temp.substring(0, tempLen - 1);
+        }
+        return temp + suffix;
+    }
+
+    public static HashMap<String, String> getCoFormat(long value) {
+        HashMap<String, String> myMap = new HashMap<>();
+
+        String myValue = format(value);
+        if (myValue.endsWith("Cr")) {
+            myMap.put("suffix", "Cr");
+            myMap.put("value", myValue.substring(0, myValue.length() - 2));
+        } else if (myValue.endsWith("K") || (myValue.endsWith("L"))) {
+            myMap.put("suffix", myValue.substring(myValue.length() - 1));
+            myMap.put("value", myValue.substring(0, myValue.length() - 1));
+        } else {
+            myMap.put("suffix", "");
+            myMap.put("value", myValue);
+        }
+        return myMap;
     }
 
     public static String toTitleCase(String string) {
@@ -141,7 +155,7 @@ public class Functions extends AppCompatActivity {
                 am = amount.toString();
             }
             // replace , with empty value
-            am = am.replace(",","");
+            am = am.replace(",", "");
             String[] arr = am.split("\\.");
             if (arr.length >= 2) {
                 try {

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "399742147727",
+    "project_id": "f-super-16eca",
+    "storage_bucket": "f-super-16eca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399742147727:android:c56511c1ddf8036bdaa4fa",
+        "android_client_info": {
+          "package_name": "com.sharad.myapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "399742147727-orvd21q0hmnjv8ug7t9sdk1plq4a2a1v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1kf9UN4L6j990zNK17UEfPmVtt-rx6D0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "399742147727-orvd21q0hmnjv8ug7t9sdk1plq4a2a1v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

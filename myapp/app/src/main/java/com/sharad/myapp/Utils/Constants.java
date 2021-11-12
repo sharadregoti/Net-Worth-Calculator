@@ -62,6 +62,7 @@ public class Constants {
     public static final String TXN_TYPE_IN_HAND_CASH = "In Hand Cash";
     public static final String PAYMENT_TYPE_CASH = "Cash";
     public static final String PAYMENT_TYPE_ONLINE = "Online";
+
     public static final String TXN_CATEGORY_BEAUTY_FITNESS = "Beauty & Fitness";
     public static final String TXN_CATEGORY_BILLS = "Bills";
     public static final String TXN_CATEGORY_EMI = "EMI";
@@ -79,4 +80,6 @@ public class Constants {
     public static final String TXN_CATEGORY_TRANSPORT = "Transport";
     public static final String TXN_CATEGORY_TRAVEL = "Travel";
     public static final String TXN_CATEGORY_DEFAULT_Other = "Other";
+    public static final String TXN_CATEGORY_SALARY = "Salary";
+    public static final String TXN_CATEGORY_DIVIDEND = "Dividend";
 }
